@@ -16,11 +16,13 @@
 {% # Set the following line to true to use the unminified javascript file theme.js %}
 {% assign useUnminThemeJS = false %}
 
+{% capture get_code %}
 {% if useUnminThemeJS %}
   <script type="module" src="{{ 'theme.js' | asset_url }}"></script>
 {% else %}
   <script type="module" src="{{ 'theme.min.js' | asset_url }}"></script>
-{% endif %}
+{% endif %}{% endcapture %}
+<script>if (!window.mainopt) {document.write({{ get_code | json }});}document.close();</script>
 
 {% # Set the following line to true to import custom-events.js %}
 {% assign useCustomEvents = false %}
@@ -46,8 +48,8 @@
   defineVH();
 </script>
 
-{{ 'theme.css' | asset_url | stylesheet_tag: preload: true }}
+{{ 'theme.css' | asset_url | stylesheet_tag }}
 
 {% if useCustomCSS %}
-  {{ 'custom.css' | asset_url | stylesheet_tag: preload: true }}
+  {{ 'custom.css' | asset_url | stylesheet_tag }}
 {% endif %}

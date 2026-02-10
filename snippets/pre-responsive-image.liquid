@@ -98,9 +98,9 @@
   {%- capture src_set_string -%}
     {%- if src_set_string.size > 0 -%}{{ src_set_string }},{{ ' ' }}{%- endif -%}
     {%- if crop_height_ratio and focal_point != "image_presentation" and no_crop != true -%}
-      {{ image | image_url: width: width, height: crop_height, crop: image_crop | replace: ' src="' , ' src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=" data-li="st" d-src="' | replace: ' srcset="' , ' dt="' }} {{width}}w
+      {{ image | image_url: width: width, height: crop_height, crop: image_crop }} {{width}}w
     {%- else -%}
-      {{ image | image_url: width: width | replace: ' src="' , ' src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=" data-li="st" d-src="' | replace: ' srcset="' , ' dt="' }} {{width}}w
+      {{ image | image_url: width: width }} {{width}}w
     {%- endif -%}
   {%- endcapture -%}
 {%- endfor -%}
@@ -113,9 +113,9 @@
   {% if prioritize_loading %}fetchpriority="high"{% else %}loading="lazy"{{ ' ' }}{% endif %}
   width="{{ image.width }}"{{ ' ' }}
   height="{{ image.height }}"{{ ' ' }}
-  {% unless tag_name == "source" %}src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=" data-li="st" d-{{ src_attr }}="{{ image | image_url: width: fallback_width }}"{{ ' ' }}{% endunless %}
+  {% unless tag_name == "source" %}{{ src_attr }}="{{ image | image_url: width: fallback_width }}"{{ ' ' }}{% endunless %}
   {% if media %}media="{{ media }}"{{ ' ' }}{% endif %}
-  dt="{{ src_set_string }}"{{ ' ' }}
+  {{ src_set_attr }}="{{ src_set_string }}"{{ ' ' }}
   sizes="{{ sizes }}"
   onload="javascript: this.closest('.image').classList.add('loaded')"
 />

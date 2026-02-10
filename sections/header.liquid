@@ -121,7 +121,7 @@
       {% endif %}
     >
       {%- if logo != blank -%}
-        {%- render 'image' with image: logo, wrapper_class: 'regular-logo', sizes: logo_sizes, prioritize_loading: true -%}
+        {%- render 'pre-image' with image: logo, wrapper_class: 'regular-logo', sizes: logo_sizes, prioritize_loading: true -%}
       {%- endif -%}
 
       {%- if logo_transparent != blank -%}

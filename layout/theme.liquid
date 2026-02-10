@@ -23,6 +23,7 @@
 
 <html class="no-js" lang="{{ request.locale.iso_code }}" style="--announcement-height: 1px;">
   <head>
+    {% render 'head-content' %}
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -63,17 +64,27 @@
     {%- render 'theme-globals' -%}
  
 <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-R5Q1C42D4F"></script>
-<script>
+<script type="load" d-src="https://www.googletagmanager.com/gtag/js?id=G-R5Q1C42D4F"></script>
+<script type="load">
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
   gtag('config', 'G-R5Q1C42D4F');
 </script>
-    {{ content_for_header }}
+
+    {%- if request.design_mode or template contains 'cart' or template contains 'checkout' -%}
+      {{ content_for_header }}
+    {%- else -%}
+      {% capture content_for_header2 %}{{ content_for_header }}{% endcapture %}
+      {{ content_for_header2 | replace: ' async="async" ', ' type="load" ' | replace: ' defer="defer" ', ' type="load" ' | replace: " src=", " d-src=" | replace: "DOMContentLoaded", "xDOMContentLoaded" | replace: "window.addEventListener('load', asyncLoad, false);", "window.addEventListener('xDOMContentLoaded', asyncLoad, false);" | replace: "addEventListener('load', prefetchAssets);", "addEventListener('xDOMContentLoaded', prefetchAssets);" | replace: "type='text/javascript' async=''", "type='load' " | replace: 'type="module" d-', 'dxt="module" type="load" d-' | replace: 'async dxt="module" type="load"', 'dxt="module"' | replace: '<script type="module">', '<script dxt="module" type="load">' | replace: "type='text/javascript' defer='defer' d-src", "type='load' d-src" | replace: '<script type="load">var Shopify', '<script>var Shopify' | replace: '<script>', '<script type="load">' | replace: 'type="load" d-src="https://shop.app/checkouts/internal/preloads.js', 'type="lload" d-src="https://shop.app/checkouts/internal/preloads.js' | replace: '<script type="load">var', '<script>var' }}
+      <script>
+            var trekkie=[];trekkie.integrations=!0;window.BOOMR={},window.BOOMR.version=true;
+      </script>
+    {%- endif -%}
 
    
-
+    {% render 'app-block' %}
+    {% render 'custom-css' %}
   </head>
 
   <body class="template-{{ request.page_type | handle }}">
@@ -109,10 +120,10 @@
       {% render 'back-to-top' %}
     </div>
 
-    {{ '//www.youtube.com/iframe_api' | script_tag }}
+    <script d-src="//www.youtube.com/iframe_api" type="load"></script>
+    {% comment %} {{ '//www.youtube.com/iframe_api' | script_tag }} {% endcomment %}
     {{ '//cdn.shopify.com/shopifycloud/shopify-plyr/v1.0/shopify-plyr.css' | stylesheet_tag }}
-  </body>
-  <link
+    <link
     rel="preload"
     fetchpriority="low"
     href="{{ 'theme-deferred.css' | asset_url }}"
@@ -121,4 +132,8 @@
   >
   <noscript><link rel="stylesheet" href="{{ 'theme-deferred.css' | asset_url }}"></noscript>
   <link rel="stylesheet" href="{{ 'custom.css' | asset_url }}">
+  {% render 'footer-app-block' %}
+  {% render 'foot-content' %}
+
+  </body>
 </html>

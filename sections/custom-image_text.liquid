@@ -4,7 +4,7 @@
       <div class="process-left">
         {% if section.settings.video != blank %}
           <div class="process-video-wrap">
-            {{ section.settings.video | video_tag: autoplay: true, loop: true, muted: true, controls: false, playsinline: true, class: 'process-video', aria_label: section.settings.alt_text }}
+            {{ section.settings.video | video_tag: loop: true, muted: true, controls: false, playsinline: true, class: 'process-video lazyvideo', aria_label: section.settings.alt_text | replace: 'preload="metadata"' ,'preload="none"' | replace: 'poster' , 'data-poster' }}
 
         
 
