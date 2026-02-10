@@ -1,0 +1,78 @@
+{% unless label == blank %}
+  {% if buttons_can_inline %}
+    {%- liquid
+      assign prev_index = forloop.index0 | minus: 1
+      assign next_index = forloop.index0 | plus: 1
+    -%}
+    {%- if section.blocks[next_index].type == 'button' -%}
+      <div class="button-block__inline-wrapper button-block__inline-wrapper--justify-{{ button_alignment }} button-block__inline-wrapper--justify-mobile-{{ button_alignment_mobile }} section-blocks__inline-buttons">
+    {%- endif -%}
+  {% endif %}
+
+  <div class="button-block__button button-block__button--justify-{{ button_alignment }} button-block__button--justify-mobile-{{ button_alignment_mobile }} {{ wrapper_class }}" {{ shopify_attributes }}>
+    {%- capture button_tag -%}{% if link == blank %}button{% else %}a{% endif %}{%- endcapture -%}
+    {%- capture button_attributes -%}{{ button_attributes }}
+      {% if link == blank %}
+        type="{{ type }}"
+        {% unless allow_linkless %}
+          data-flash-trigger data-flash-message="{{ 'general.flash_alert.no_link' | t }}"
+        {% endunless %}
+      {% else %}
+        href="{{ link }}"
+      {% endif %}
+    {%- endcapture -%}
+
+    <!-- Primary Button -->
+    <{{ button_tag }}
+      {{ button_attributes }}
+      class="
+        btn
+        {% if is_overlay %}btn--overlay{% endif %}
+        {% if is_full %}btn--full{% endif %}
+        {% if is_small %}btn--small{% endif %}
+        {% if is_x_small %}btn--x-small{% endif %}
+        {{ button_style | default: 'btn--primary' }}"
+    >
+      <span>{{ label }}</span>
+    </{{ button_tag }}>
+
+    <!-- Secondary Button -->
+    {% if label_2 != blank %}
+      {%- capture button_tag_2 -%}{% if link_2 == blank %}button{% else %}a{% endif %}{%- endcapture -%}
+      {%- capture button_attributes_2 -%}
+        {% if link_2 == blank %}
+          type="{{ type }}"
+          {% unless allow_linkless %}
+            data-flash-trigger data-flash-message="{{ 'general.flash_alert.no_link' | t }}"
+          {% endunless %}
+        {% else %}
+          href="{{ link_2 }}"
+        {% endif %}
+      {%- endcapture -%}
+
+      <{{ button_tag_2 }}
+        {{ button_attributes_2 }}
+        class="
+          btn
+          {% if is_overlay %}btn--overlay{% endif %}
+          {% if is_full %}btn--full{% endif %}
+          {% if is_small %}btn--small{% endif %}
+          {% if is_x_small %}btn--x-small{% endif %}
+          {{ button_style_2 | default: 'btn--secondary' }}"
+      >
+        <span>{{ label_2 }}</span>
+      </{{ button_tag_2 }}>
+    {% endif %}
+
+   
+  </div>
+
+  {% if buttons_can_inline and prev_index > -1 and section.blocks[prev_index].type == 'button' %}
+    </div>
+     {% if btn_text != blank %}
+      <div class="button_block-text">
+        <p class="button-text">{{ btn_text }}</p>
+      </div>
+    {% endif %}
+  {% endif %}
+{% endunless %}

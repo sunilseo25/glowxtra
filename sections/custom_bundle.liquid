@@ -1,0 +1,181 @@
+{% comment %}
+  Custom Product Bundle Section
+  Each block includes its own button with a link option.
+{% endcomment %}
+
+<section class="custom-bundle-section">
+  <div class="container">
+    <div class="top-section">
+      {% if section.settings.heading != blank %}
+        <h2 class="bundle-heading">{{ section.settings.heading }}</h2>
+      {% endif %}
+      {% if section.settings.subheading != blank %}
+        <p class="subheading">{{ section.settings.subheading }}</p>
+      {% endif %}
+    </div>
+
+    <div class="bundle-products">
+      {% for block in section.blocks %}
+        <div class="bundle-item">
+          {% if block.settings.image %}
+            <img src="{{ block.settings.image | img_url: '500x' }}" alt="{{ block.settings.title }}" class="bundle-item__image">
+          {% endif %}
+          <div class="bundle-item__info">
+            {% if block.settings.title != blank %}
+              <h3 class="bundle-item__title">{{ block.settings.title }}</h3>
+            {% endif %}
+            {% if block.settings.description != blank %}
+              <p class="bundle-item__desc">{{ block.settings.description }}</p>
+            {% endif %}
+            {% if block.settings.price != blank %}
+              <p class="bundle-item__price">{{ block.settings.price }}</p>
+            {% endif %}
+            
+            {% if block.settings.button_label != blank and block.settings.button_link != blank %}
+              <a href="{{ block.settings.button_link }}" class="btn btn--overlay btn--primary">{{ block.settings.button_label }}</a>
+            {% endif %}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<style>
+.custom-bundle-section {
+  text-align: center;
+}
+.bundle-heading {
+  font-size: 2em;
+  font-family: 'Lora';
+  margin-bottom: 10px;
+}
+.custom-bundle-section .top-section {
+  margin-bottom: 40px;
+}
+.custom-bundle-section .container {
+  max-width: calc(var(--max-width) + calc(var(--space-outer) * 2));
+  margin: 0 auto;
+  padding: var(--spacing-10) var(--space-outer);
+}
+.bundle-products {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30px;
+}
+.bundle-item {
+  max-width: 100%;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+}
+.bundle-item__info p.bundle-item__desc {
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+.bundle-item__info a.btn.btn--overlay.btn--primary {
+    margin-top: 12px;
+}
+.bundle-item__image {
+  width: 100%;
+}
+.bundle-item__info {
+  margin-top: 10px;
+}
+.bundle-item__title {
+  font-weight: 600;
+  font-size: 16px;
+  font-family: 'Lora';
+  margin-bottom: 10px;
+}
+.bundle-item__price {
+  font-weight: bold;
+  color: #000;
+  margin-bottom: 10px;
+}
+.bundle-btn {
+  display: inline-block;
+  background-color: #007ace;
+  color: #fff;
+  text-decoration: none;
+  padding: 12px 24px;
+  font-size: 15px;
+  border-radius: 30px;
+  transition: all 0.3s ease;
+  text-align: center;
+}
+.bundle-btn:hover {
+  background-color: #005f99;
+}
+@media (max-width: 768px) {
+  .bundle-heading {
+    font-size: 22px;
+  }
+  .bundle-products {
+    grid-template-columns: 1fr !important;
+  }
+}
+</style>
+
+{% schema %}
+{
+  "name": "Custom Product Bundle",
+  "settings": [
+    {
+      "type": "richtext",
+      "id": "heading",
+      "label": "Bundle Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "subheading",
+      "label": "Add Subheading here"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "bundle_item",
+      "name": "Bundle Item",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Product Image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Product Title"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Product Description"
+        },
+        {
+          "type": "text",
+          "id": "price",
+          "label": "Price Text"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button Label",
+          "default": "View Product"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button Link"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 6,
+  "presets": [
+    {
+      "name": "Custom Product Bundle"
+    }
+  ]
+}
+{% endschema %}

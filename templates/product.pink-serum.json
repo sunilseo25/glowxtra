@@ -1,0 +1,305 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-product--default",
+      "blocks": {
+        "product_header": {
+          "type": "product_header",
+          "settings": {
+            "show_divider": true,
+            "show_vendor": true,
+            "show_sku": true,
+            "show_discount": true,
+            "discount_format": "save_percent",
+            "show_product_rating": true,
+            "show_sale_badge": true,
+            "show_custom_badges": true
+          }
+        },
+        "variant_picker": {
+          "type": "variant_picker",
+          "settings": {
+            "variant_popup_option": "Size",
+            "variant_popup_icon": "measuring-tape",
+            "variant_popup_text": "Size guide",
+            "variant_popup_page": "size-guide",
+            "swatch_size": "medium",
+            "chip_layout": "natural"
+          }
+        },
+        "inventory-counter": {
+          "type": "inventory-counter",
+          "settings": {
+            "label": "",
+            "inventory_max": "40",
+            "low_inventory_threshold": "8",
+            "show_status_bar": false,
+            "show_untracked_quantity": true
+          }
+        },
+        "quantity_selector": {
+          "type": "quantity_selector",
+          "settings": {
+            "show_labels": true
+          }
+        },
+        "buy_buttons": {
+          "type": "buy_buttons",
+          "settings": {
+            "show_dynamic_checkout": true,
+            "enable_sticky_atc_bar_desktop": true,
+            "enable_sticky_atc_bar_mobile": true,
+            "divider_width": "shadow--small"
+          }
+        },
+        "accordion_hzzzNb": {
+          "type": "accordion",
+          "settings": {
+            "expand_by_default": false,
+            "column_placement": "right",
+            "heading": "Product Description",
+            "heading_tag": "h4",
+            "content": "",
+            "page_for_content": "",
+            "custom_liquid": "{{ product.description}}"
+          }
+        },
+        "product_callouts": {
+          "type": "product_callouts",
+          "settings": {
+            "title": "Product Info",
+            "title_tag": "h3",
+            "add_box": true,
+            "add_dividers": true,
+            "icon_1": "price-tag",
+            "text_1": "<p>Free shipping over $50</p>",
+            "icon_2": "package-closed",
+            "text_2": "<p>Free Returns & Exchanges</p>",
+            "icon_3": "plant",
+            "text_3": "",
+            "icon_4": "chat",
+            "text_4": "<p>Have questions about fit? <a href=\"/pages/contact\" title=\"Contact\">Contact us</a></p>",
+            "icon_5": "moving-truck",
+            "text_5": "",
+            "icon_6": "padlock",
+            "text_6": "<p>Secure payment</p>",
+            "display_as_collapsible_row": true,
+            "expand_by_default": false
+          }
+        }
+      },
+      "block_order": [
+        "product_header",
+        "variant_picker",
+        "inventory-counter",
+        "quantity_selector",
+        "buy_buttons",
+        "accordion_hzzzNb",
+        "product_callouts"
+      ],
+      "settings": {
+        "enable_sticky_product_details": true,
+        "show_breadcrumbs": false,
+        "show_navigation_buttons": true,
+        "show_featured_media_first": true,
+        "gallery_style": "grid",
+        "gallery_style_mobile": "carousel",
+        "gallery_size": "small",
+        "gallery_overflow": "never",
+        "enable_video_looping": true,
+        "enable_product_lightbox": true,
+        "image_aspect_ratio": "square",
+        "enable_multiple_variant_media": false,
+        "enable_mobile_carousel_looping": true,
+        "show_mobile_carousel_images_full_width": true,
+        "hide_mobile_carousel_dots": false,
+        "enable_gift_card_recipient": true,
+        "enable_animation": true
+      }
+    },
+    "grid_4bNRFz": {
+      "type": "grid",
+      "blocks": {
+        "item_VpkEzx": {
+          "type": "item",
+          "settings": {
+            "width": "100",
+            "height": 800,
+            "mobile_height": 500,
+            "media_type": "image",
+            "image": "shopify://shop_images/Facial_Roller_products_Inner_page_copy.png",
+            "focal_point": "image_presentation",
+            "mobile_focal_point": "image_presentation",
+            "video_focal_point": "center",
+            "mobile_video_focal_point": "center",
+            "media_fit": "contain",
+            "text_position": "center_center",
+            "accent": "",
+            "title": "",
+            "heading_tag": "h3",
+            "heading_font_class": "fs-heading-2-base",
+            "subheading": "",
+            "subheading_tag": "h4",
+            "subheading_font_class": "fs-heading-5-base",
+            "text": "",
+            "text_font_class": "fs-body-100",
+            "link": "",
+            "link_text": "",
+            "button_style": "btn--primary",
+            "background_color": "#f7f7e8",
+            "text_color": "#ffffff",
+            "button_background_color": "#ffffff",
+            "button_text_color": "#000000",
+            "color_overlay": "#000000",
+            "color_overlay_gradient": "",
+            "overlay_opacity": 0
+          }
+        }
+      },
+      "block_order": [
+        "item_VpkEzx"
+      ],
+      "name": "t:sections.grid.presets.name",
+      "settings": {
+        "heading": "",
+        "heading_tag": "h2",
+        "subheading": "",
+        "content_alignment": "left",
+        "enable_animation": true,
+        "full_width": false,
+        "spacing": 24,
+        "divider_style": "none",
+        "section_padding": "section--vertical-padding-top-bottom"
+      }
+    },
+    "clinical_results_prgUdA": {
+      "type": "clinical-results",
+      "blocks": {
+        "result_item_L8FCqT": {
+          "type": "result_item",
+          "settings": {
+            "result_content": "<p><strong>Significantly reduces</strong> deep wrinkles & fine lines in just <strong>1 week.</strong></p><p><strong>98%</strong> of users report skin looks healthier, brighter, plumper & more nourished</p>"
+          }
+        },
+        "result_item_mzHLmH": {
+          "type": "result_item",
+          "settings": {
+            "result_content": "<p><strong>Significantly reduces</strong> deep wrinkles & fine lines in just <strong>1 week.</strong></p><p><strong>93%</strong> of users report an improvement in puffiness and sagging.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "result_item_L8FCqT",
+        "result_item_mzHLmH"
+      ],
+      "name": "Clinical Results",
+      "settings": {
+        "before_image": "shopify://shop_images/BEAR-mini_desktop_before.webp",
+        "before_label": "Before",
+        "after_image": "shopify://shop_images/BEAR-mini_desktop_after.webp",
+        "after_label": "After",
+        "subheading": "BEFORE & AFTER",
+        "heading": "Clinical results"
+      }
+    },
+    "product_feature_Bp9NaA": {
+      "type": "product-feature",
+      "blocks": {
+        "accordion_XVF6cJ": {
+          "type": "accordion",
+          "settings": {
+            "title": "What makes it special?",
+            "content": "<ul><li>Clinically proven to significantly improve deep wrinkles and fine lines in 1 week.<br/></li><li>Clinically proven to significantly improve skin firmness and elasticity in 1 week.<br/></li><li>2 revolutionary types of microcurrent: Advanced Microcurrent™ & Lifting Microcurrent™.<br/></li><li>Anti-Shock System™ 2.0 adjusts your microcurrent treatment to perfectly suit your skin.<br/></li><li>5 patented T-Sonic™ massage patterns, each with its own special benefit.<br/></li><li>3 video-guided treatments to target different areas of the face and neck, on FOREO app.</li></ul>",
+            "custom_links_text": "",
+            "custom_link_url": "",
+            "open_in_new_tab": false
+          }
+        },
+        "accordion_hJ7Dcc": {
+          "type": "accordion",
+          "settings": {
+            "title": "What’s included?",
+            "content": "<ul><li> BEAR™ 2 go</li><li>USB charging cable</li><li>Quick start guide</li><li>General manual</li><li>2-year warranty (Spain, Portugal, Sweden: 3-year warranty)</li></ul>",
+            "custom_links_text": "",
+            "custom_link_url": "",
+            "open_in_new_tab": false
+          }
+        },
+        "accordion_xE8fby": {
+          "type": "accordion",
+          "settings": {
+            "title": "",
+            "content": "<p></p><p></p>",
+            "custom_links_text": "User Manual",
+            "custom_link_url": "#",
+            "open_in_new_tab": false
+          }
+        }
+      },
+      "block_order": [
+        "accordion_XVF6cJ",
+        "accordion_hJ7Dcc",
+        "accordion_xE8fby"
+      ],
+      "name": "Product Feature",
+      "settings": {
+        "product": "dual-light-wand-acne-wrinkle-therapy",
+        "background_color": "#ffffff"
+      }
+    },
+    "1762517720859dbca5": {
+      "type": "apps",
+      "blocks": {
+        "judge_me_reviews_review_widget_TJdYzJ": {
+          "type": "shopify://apps/judge-me-reviews/blocks/review_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {
+            "review_data": "sample_data",
+            "max_width": 1200,
+            "show_shop_reviews": true,
+            "empty_state": "empty_widget"
+          }
+        }
+      },
+      "block_order": [
+        "judge_me_reviews_review_widget_TJdYzJ"
+      ],
+      "settings": {
+        "heading": "",
+        "enable_animation": true,
+        "divider_style": "none",
+        "section_padding": "section--vertical-padding-none"
+      }
+    },
+    "recommendations": {
+      "type": "recommended-products",
+      "settings": {
+        "title": "Product Recommended",
+        "heading_tag": "h2",
+        "subheading": "",
+        "maximum_products": 8,
+        "columns": "4",
+        "mobile_columns": "2",
+        "enable_animation": true,
+        "divider_style": "none",
+        "section_padding": "section--vertical-padding-top-bottom"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "grid_4bNRFz",
+    "clinical_results_prgUdA",
+    "product_feature_Bp9NaA",
+    "1762517720859dbca5",
+    "recommendations"
+  ]
+}

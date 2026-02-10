@@ -1,0 +1,611 @@
+{% doc %}
+  @prompt
+    I want a section as image with collapsible content 
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-image-collapsible-{{ ai_gen_id }} {
+    display: flex;
+    flex-direction: {{ block.settings.layout }};
+    gap: {{ block.settings.gap }}px;
+    align-items: {{ block.settings.vertical_alignment }};
+     padding: 50px 20px;
+    background-color: {{ block.settings.background_color }};
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .ai-image-collapsible__image-wrapper-{{ ai_gen_id }} {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .ai-image-collapsible__image-{{ ai_gen_id }} {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: {{ block.settings.image_border_radius }}px;
+  }
+
+  .ai-image-collapsible__image-placeholder-{{ ai_gen_id }} {
+    width: 100%;
+    background-color: #f4f4f4;
+    border-radius: {{ block.settings.image_border_radius }}px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    aspect-ratio: 4 / 3;
+  }
+
+  .ai-image-collapsible__image-placeholder-{{ ai_gen_id }} svg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+    background-color: #ffffff;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+  .ai-image-collapsible__empty-state-{{ ai_gen_id }} {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 12px 20px;
+    font-size: 14px;
+    color: #666;
+    text-align: center;
+    pointer-events: none;
+  }
+
+  .ai-image-collapsible__content-wrapper-{{ ai_gen_id }} {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .ai-image-collapsible__heading-{{ ai_gen_id }} {
+    font-size: {{ block.settings.heading_size }}px;
+    color: {{ block.settings.heading_color }};
+    margin: 0 0 {{ block.settings.heading_spacing }}px;
+    font-family: {{ block.settings.heading_font.family }}, {{ block.settings.heading_font.fallback_families }};
+    font-weight: {{ block.settings.heading_font.weight }};
+  }
+
+  .ai-image-collapsible__description-{{ ai_gen_id }} {
+    font-size: {{ block.settings.description_size }}px;
+    color: {{ block.settings.text_color }};
+    margin: 0 0 {{ block.settings.description_spacing }}px;
+    line-height: 1.6;
+  }
+
+  .ai-image-collapsible__accordion-{{ ai_gen_id }} {
+    border-top: 1px solid {{ block.settings.border_color }};
+  }
+
+  .ai-image-collapsible__item-{{ ai_gen_id }} {
+    border-bottom: 1px solid {{ block.settings.border_color }};
+  }
+
+  .ai-image-collapsible__button-{{ ai_gen_id }} {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: {{ block.settings.item_padding }}px 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    font-size: {{ block.settings.item_title_size }}px;
+    color: {{ block.settings.text_color }};
+    font-family: {{ block.settings.heading_font.family }}, {{ block.settings.heading_font.fallback_families }};
+    font-weight: {{ block.settings.heading_font.weight }};
+    transition: color 0.3s ease;
+  }
+
+  .ai-image-collapsible__button-{{ ai_gen_id }}:hover {
+    color: {{ block.settings.heading_color }};
+  }
+
+  .ai-image-collapsible__icon-{{ ai_gen_id }} {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    transition: transform 0.3s ease;
+  }
+
+  .ai-image-collapsible__icon-{{ ai_gen_id }} svg {
+    width: 100%;
+    height: 100%;
+    stroke: currentColor;
+  }
+
+  .ai-image-collapsible__button-{{ ai_gen_id }}[aria-expanded="true"] .ai-image-collapsible__icon-{{ ai_gen_id }} {
+    transform: rotate(180deg);
+  }
+
+  .ai-image-collapsible__panel-{{ ai_gen_id }} {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+  }
+
+  .ai-image-collapsible__panel-content-{{ ai_gen_id }} {
+    padding-bottom: {{ block.settings.item_padding }}px;
+    font-size: {{ block.settings.item_content_size }}px;
+    color: {{ block.settings.text_color }};
+    line-height: 1.6;
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-image-collapsible-{{ ai_gen_id }} {
+      flex-direction: column;
+    }
+
+    .ai-image-collapsible__heading-{{ ai_gen_id }} {
+      font-size: calc({{ block.settings.heading_size }}px * 0.8);
+    }
+    .ai-image-collapsible-{{ ai_gen_id }} {
+     padding: 50px 20px;
+  }
+
+    .ai-image-collapsible__description-{{ ai_gen_id }} {
+      font-size: calc({{ block.settings.description_size }}px * 0.9);
+    }
+
+    .ai-image-collapsible__button-{{ ai_gen_id }} {
+      font-size: calc({{ block.settings.item_title_size }}px * 0.9);
+    }
+
+    .ai-image-collapsible__panel-content-{{ ai_gen_id }} {
+      font-size: calc({{ block.settings.item_content_size }}px * 0.9);
+    }
+  }
+{% endstyle %}
+
+{%- capture image_sizes -%}
+  {%- if section.settings.show_small_image -%}
+    (min-width: 720px) calc(calc(50vw - clamp(18px, 3.3vw, 3.3vw)) * .93), calc((100vw - 80px) * .93)
+  {%- else -%}
+    (min-width: 720px) calc(calc(50vw - clamp(18px, 3.3vw, 3.3vw)), calc(100vw - 80px)
+  {%- endif -%}
+{%- endcapture -%}
+
+{%-
+              render 'image' with
+              sizes: image_sizes,
+              aspect_ratio: section.settings.aspect_ratio,
+              focal_point: section.settings.focal_point,
+            -%}
+<collapsible-content-{{ ai_gen_id }} class="ai-image-collapsible-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-image-collapsible__image-wrapper-{{ ai_gen_id }}">
+    {% if block.settings.image %}
+      <img
+        src="{{ block.settings.image | image_url: width: 1200 }}"
+        alt="{{ block.settings.image.alt | escape }}"
+        loading="lazy"
+        width="{{ block.settings.image.width }}"
+        height="{{ block.settings.image.height }}"
+        class="ai-image-collapsible__image-{{ ai_gen_id }}"
+      >
+    {% else %}
+      <div class="ai-image-collapsible__image-placeholder-{{ ai_gen_id }}">
+        {{ 'image' | placeholder_svg_tag }}
+        <div class="ai-image-collapsible__empty-state-{{ ai_gen_id }}">
+          Add an image to get started
+        </div>
+      </div>
+    {% endif %}
+  </div>
+
+  <div class="ai-image-collapsible__content-wrapper-{{ ai_gen_id }}">
+    {% if block.settings.heading != blank %}
+      <h2 class="ai-image-collapsible__heading-{{ ai_gen_id }}">{{ block.settings.heading }}</h2>
+    {% endif %}
+
+    {% if block.settings.description != blank %}
+      <div class="ai-image-collapsible__description-{{ ai_gen_id }}">{{ block.settings.description }}</div>
+    {% endif %}
+
+    <div class="ai-image-collapsible__accordion-{{ ai_gen_id }}">
+      {% for i in (1..5) %}
+        {% liquid
+          assign title_key = 'item_' | append: i | append: '_title'
+          assign content_key = 'item_' | append: i | append: '_content'
+          assign open_key = 'item_' | append: i | append: '_open'
+
+          assign item_title = block.settings[title_key]
+          assign item_content = block.settings[content_key]
+          assign item_open = block.settings[open_key]
+        %}
+
+        {% if item_title != blank %}
+          <div class="ai-image-collapsible__item-{{ ai_gen_id }}">
+            <button
+              class="ai-image-collapsible__button-{{ ai_gen_id }}"
+              aria-expanded="{% if item_open %}true{% else %}false{% endif %}"
+              aria-controls="ai-image-collapsible-panel-{{ ai_gen_id }}-{{ i }}"
+            >
+              <span>{{ item_title }}</span>
+              <span class="ai-image-collapsible__icon-{{ ai_gen_id }}">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+              </span>
+            </button>
+            <div
+              id="ai-image-collapsible-panel-{{ ai_gen_id }}-{{ i }}"
+              class="ai-image-collapsible__panel-{{ ai_gen_id }}"
+              {% if item_open %}style="max-height: 1000px;"{% endif %}
+            >
+              {% if item_content != blank %}
+                <div class="ai-image-collapsible__panel-content-{{ ai_gen_id }}">
+                  {{ item_content }}
+                </div>
+              {% endif %}
+            </div>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</collapsible-content-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class CollapsibleContent{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+      }
+
+      connectedCallback() {
+        this.buttons = this.querySelectorAll('.ai-image-collapsible__button-{{ ai_gen_id }}');
+        this.setupEventListeners();
+      }
+
+      setupEventListeners() {
+        this.buttons.forEach((button) => {
+          button.addEventListener('click', () => {
+            const isExpanded = button.getAttribute('aria-expanded') === 'true';
+            const panel = button.nextElementSibling;
+
+            if (isExpanded) {
+              button.setAttribute('aria-expanded', 'false');
+              panel.style.maxHeight = '0';
+            } else {
+              button.setAttribute('aria-expanded', 'true');
+              panel.style.maxHeight = panel.scrollHeight + 'px';
+            }
+          });
+        });
+      }
+    }
+
+    customElements.define('collapsible-content-{{ ai_gen_id }}', CollapsibleContent{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Image collapsible",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "options": [
+        {
+          "value": "row",
+          "label": "Image left"
+        },
+        {
+          "value": "row-reverse",
+          "label": "Image right"
+        }
+      ],
+      "default": "row"
+    },
+    {
+      "type": "select",
+      "id": "vertical_alignment",
+      "label": "Vertical alignment",
+      "options": [
+        {
+          "value": "flex-start",
+          "label": "Top"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "flex-end",
+          "label": "Bottom"
+        }
+      ],
+      "default": "flex-start"
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "min": 0,
+      "max": 100,
+      "step": 10,
+      "unit": "px",
+      "label": "Gap",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding",
+      "min": 0,
+      "max": 100,
+      "step": 10,
+      "unit": "px",
+      "label": "Padding",
+      "default": 40
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "range",
+      "id": "image_border_radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Border radius",
+      "default": 8
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Frequently asked questions"
+    },
+    {
+      "type": "font_picker",
+      "id": "heading_font",
+      "label": "Heading font",
+      "default": "lora_n4"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "min": 20,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading size",
+      "default": 32
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#22292d"
+    },
+    {
+      "type": "range",
+      "id": "heading_spacing",
+      "min": 0,
+      "max": 50,
+      "step": 5,
+      "unit": "px",
+      "label": "Heading spacing",
+      "default": 20
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description",
+      "default": "<p>Find answers to common questions about our products and services.</p>"
+    },
+    {
+      "type": "range",
+      "id": "description_size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Description size",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "description_spacing",
+      "min": 0,
+      "max": 50,
+      "step": 5,
+      "unit": "px",
+      "label": "Description spacing",
+      "default": 25
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#22292d"
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Border color",
+      "default": "#e0e0e0"
+    },
+    {
+      "type": "header",
+      "content": "Collapsible items"
+    },
+    {
+      "type": "range",
+      "id": "item_padding",
+      "min": 10,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Item padding",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "item_title_size",
+      "min": 14,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Item title size",
+      "default": 18
+    },
+    {
+      "type": "range",
+      "id": "item_content_size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Item content size",
+      "default": 15
+    },
+    {
+      "type": "header",
+      "content": "Item 1"
+    },
+    {
+      "type": "text",
+      "id": "item_1_title",
+      "label": "Title",
+      "default": "What is your return policy?"
+    },
+    {
+      "type": "richtext",
+      "id": "item_1_content",
+      "label": "Content",
+      "default": "<p>We offer a 30-day return policy on all unused products in their original packaging.</p>"
+    },
+    {
+      "type": "checkbox",
+      "id": "item_1_open",
+      "label": "Open by default",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Item 2"
+    },
+    {
+      "type": "text",
+      "id": "item_2_title",
+      "label": "Title",
+      "default": "How long does shipping take?"
+    },
+    {
+      "type": "richtext",
+      "id": "item_2_content",
+      "label": "Content",
+      "default": "<p>Standard shipping typically takes 5-7 business days. Express shipping is available for 2-3 day delivery.</p>"
+    },
+    {
+      "type": "checkbox",
+      "id": "item_2_open",
+      "label": "Open by default",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Item 3"
+    },
+    {
+      "type": "text",
+      "id": "item_3_title",
+      "label": "Title",
+      "default": "Do you ship internationally?"
+    },
+    {
+      "type": "richtext",
+      "id": "item_3_content",
+      "label": "Content",
+      "default": "<p>Yes, we ship to most countries worldwide. Shipping costs and delivery times vary by location.</p>"
+    },
+    {
+      "type": "checkbox",
+      "id": "item_3_open",
+      "label": "Open by default",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Item 4"
+    },
+    {
+      "type": "text",
+      "id": "item_4_title",
+      "label": "Title",
+      "default": "Are your products cruelty-free?"
+    },
+    {
+      "type": "richtext",
+      "id": "item_4_content",
+      "label": "Content",
+      "default": "<p>Yes, all our products are cruelty-free and never tested on animals.</p>"
+    },
+    {
+      "type": "checkbox",
+      "id": "item_4_open",
+      "label": "Open by default",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Item 5"
+    },
+    {
+      "type": "text",
+      "id": "item_5_title",
+      "label": "Title",
+      "default": "How can I track my order?"
+    },
+    {
+      "type": "richtext",
+      "id": "item_5_content",
+      "label": "Content",
+      "default": "<p>Once your order ships, you'll receive a tracking number via email to monitor your delivery.</p>"
+    },
+    {
+      "type": "checkbox",
+      "id": "item_5_open",
+      "label": "Open by default",
+      "default": false
+    }
+  ],
+  "presets": [
+    {
+      "name": "Image collapsible"
+    }
+  ]
+}
+{% endschema %}

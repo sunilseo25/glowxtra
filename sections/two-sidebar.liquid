@@ -1,0 +1,95 @@
+<div class="skincare-meet-sec">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-lg-7">
+					<div class="left-skcare">
+                       {% if section.settings.left-title != blank %}
+    						<h2>{{ section.settings.left-title }}</h2>
+                       {% endif %}
+						<ul>
+                          {% for block in section.blocks %}
+                                 
+							<li>
+                               {% if block.settings.image != blank %}
+                              <span><img src="{{block.settings.image | img_url:'master' }}" alt=""/></span>  
+                                 {% endif %}
+                             {{ block.settings.text }}</li>
+                         {% endfor %}
+						</ul>
+                          {% if section.settings.link_text != blank or section.settings.link != blank %}
+                <a href="{{ section.settings.link }}" class="btn">{{ section.settings.link_text }}</a>
+              {% endif %}
+					</div>
+				</div>
+				<div class="col-lg-5">
+                   {% if section.settings.image_right!=blank %}
+    					<div class="right-skcare">
+    						<figure>
+    							<img src="{{ section.settings.image_right | img_url:'master' }}">
+    						</figure>
+    					</div>
+                   {% endif %}
+				</div>
+			</div>
+		</div>
+	</div>
+
+{% schema %}
+{
+  "name": "two-sidebar",
+  "tag": "section",
+  "class": "two-sidebar",
+  "settings": [
+    {
+      "type": "text",
+      "id": "left-title",
+      "label": "Left Side Title"
+    },
+    {
+      "id": "image_right",
+      "type": "image_picker",
+      "label": "Right Side"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "t:shared.settings.background_color.label"
+    },
+     {
+          "id": "link",
+          "type": "url",
+          "label": "t:sections.image_hero.blocks.button.settings.link.label"
+        },
+        {
+          "id": "link_text",
+          "type": "text",
+          "label": "t:sections.image_hero.blocks.button.settings.link_text.label",
+          "default": "Read more"
+        }
+  ],
+  "max_blocks": 6,
+  "blocks": [
+     {
+       "name": "Slide",
+       "type": "slide",
+       "settings": [
+         {
+           "type": "image_picker",
+           "id": "image",
+           "label": "Image"
+         },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "text"
+        }
+       ]
+     }
+  ],
+  "presets": [
+    {
+      "name": "Two-Sidebar"
+    }
+      ]
+}
+{% endschema %}

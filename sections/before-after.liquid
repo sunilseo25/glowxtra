@@ -1,0 +1,421 @@
+<style>
+.before-after-reviews {
+  background: {{ section.settings.bg-color }};
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.before-after-reviews .container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.before-after-reviews h2 {
+    font-family: 'Lora', serif;
+    color: #111;
+    margin-bottom: 40px;
+    font-size: revert;
+}
+.review-slider .product-details {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+/* Slider */
+.review-slider {
+  position: relative;
+  overflow: hidden;
+}
+
+.review-track {
+  display: flex;
+  transition: transform 0.5s ease;
+}
+.review-content {
+    text-align: left;
+    padding: 20px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+.review-card {
+  flex: 0 0 100%;
+  max-width: 100%;
+  padding: 0 10px;
+  box-sizing: border-box;
+}
+
+@media (min-width: 768px) {
+  .review-card {
+    flex: 0 0 33.33%;
+    max-width: 33.33%;
+  }
+}
+
+.review-inner {
+  background: #fff;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* Images */
+.review-images {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.review-images img {
+  width: 100%;
+}
+
+.review-image {
+  flex: 1;
+  position: relative;
+}
+
+.review-image span {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  background: rgba(255,255,255,0.9);
+  border-radius: 6px;
+  font-size: 0.8rem;
+  padding: 2px 8px;
+  font-weight: 600;
+}
+
+/* Review content */
+.review-content {
+  text-align: left;
+  padding: 20px;
+  flex: 1;
+}
+
+.customer-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.customer-header img.flag {
+  width: 22px;
+  height: 15px;
+  border-radius: 2px;
+}
+
+.customer-name {
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.verified {
+  background: #e7f7ec;
+  color: #2f8c4f;
+  border-radius: 8px;
+  padding: 2px 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-left: auto;
+}
+
+.review-title {
+    font-weight: 600;
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+    font-family: 'Lora';
+}
+
+.review-text {
+  font-size: 0.95rem;
+  color: #333;
+  line-height: 1.5;
+}
+
+.product-used {
+    background: #fafafa;
+    border-radius: 8px;
+    margin-top: 15px;
+    padding: 10px;
+    font-size: 0.9rem;
+    transition: .2s ease;
+}
+
+.product-used img {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  margin-right: 10px;
+}
+
+.product-used strong {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+/* Slider controls */
+.slider-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.slider-button {
+  background: #c46a84;
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.slider-button:hover {
+  background: #a45068;
+}
+
+.slider-dots {
+  display: flex;
+  gap: 6px;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ddd;
+  cursor: pointer;
+}
+
+.dot.active {
+  background: #c46a84;
+}
+</style>
+
+<section class="before-after-reviews">
+  <div class="container">
+    {% if section.settings.heading != blank %}
+      <h2>{{ section.settings.heading }}</h2>
+    {% endif %}
+
+    <div class="review-slider">
+      <div class="review-track" id="reviewTrack">
+        {% for block in section.blocks %}
+        <div class="review-card">
+          <div class="review-inner">
+            <div class="review-images">
+              <div class="review-image">
+                <img src="{{ block.settings.before_image | image_url: width: 400 }}" alt="Before">
+                <span>{{ block.settings.before_label }}</span>
+              </div>
+              <div class="review-image">
+                <img src="{{ block.settings.after_image | image_url: width: 400 }}" alt="After">
+                <span>{{ block.settings.after_label }}</span>
+              </div>
+            </div>
+
+            <div class="review-content">
+              <div class="customer-header">
+                {% if block.settings.flag_image != blank %}
+                  <img src="{{ block.settings.flag_image | image_url: width: 30 }}" class="flag" alt="flag">
+                {% endif %}
+                <span class="customer-name">{{ block.settings.name }}</span>
+                <span class="verified">Verified customer</span>
+              </div>
+
+              <div class="review-title">{{ block.settings.title }}</div>
+              <div class="review-text">{{ block.settings.text }}</div>
+
+              <div class="product-used">
+                <strong>{{ block.settings.name }} uses...</strong>
+                <div class="product-details">
+                {% if block.settings.product_image != blank %}
+                  <img src="{{ block.settings.product_image | image_url: width: 60 }}" alt="">
+                {% endif %}
+                <a href="{{ block.settings.product_link }}">{{ block.settings.product_name }}</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+
+      <div class="slider-controls">
+        <button class="slider-button" id="prevBtn">&#10094;</button>
+        <div class="slider-dots" id="sliderDots"></div>
+        <button class="slider-button" id="nextBtn">&#10095;</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const track = document.getElementById('reviewTrack');
+  const nextBtn = document.getElementById('nextBtn');
+  const prevBtn = document.getElementById('prevBtn');
+  const dotsContainer = document.getElementById('sliderDots');
+
+  let cards = Array.from(track.children);
+  let index = 0;
+  let slideWidth;
+  const totalSlides = cards.length;
+
+  /* ========= CLONE SLIDES FOR INFINITE LOOP ========= */
+  const prependClones = cards.map(card => card.cloneNode(true));
+  const appendClones = cards.map(card => card.cloneNode(true));
+  prependClones.forEach(c => track.prepend(c));
+  appendClones.forEach(c => track.append(c));
+
+  cards = Array.from(track.children);
+
+  const setWidth = () => {
+    slideWidth = cards[0].offsetWidth;
+    track.style.transition = 'none';
+    track.style.transform = `translateX(-${(totalSlides + index) * slideWidth}px)`;
+  };
+
+  window.addEventListener('resize', setWidth);
+  setWidth();
+
+  /* ========= CREATE DOTS ========= */
+  for (let i = 0; i < totalSlides; i++) {
+    const dot = document.createElement('div');
+    dot.classList.add('dot');
+    if (i === 0) dot.classList.add('active');
+
+    dot.addEventListener('click', () => {
+      index = i;
+      moveToSlide();
+      resetAutoplay();
+    });
+
+    dotsContainer.appendChild(dot);
+  }
+
+  const updateDots = () => {
+    const dots = dotsContainer.querySelectorAll('.dot');
+    dots.forEach((dot, i) =>
+      dot.classList.toggle('active', i === (index % totalSlides))
+    );
+  };
+
+  /* ========= MOVE SLIDER ========= */
+  const moveToSlide = () => {
+    track.style.transition = 'transform 0.5s ease';
+    track.style.transform = `translateX(-${(totalSlides + index) * slideWidth}px)`;
+    updateDots();
+  };
+
+  const nextSlide = () => {
+    index++;
+    moveToSlide();
+  };
+
+  const prevSlide = () => {
+    index--;
+    moveToSlide();
+  };
+
+  const handleTransitionEnd = () => {
+    track.style.transition = 'none';
+    if (index >= totalSlides) {
+      index = 0;
+      track.style.transform = `translateX(-${(totalSlides + index) * slideWidth}px)`;
+    } else if (index < 0) {
+      index = totalSlides - 1;
+      track.style.transform = `translateX(-${(totalSlides + index) * slideWidth}px)`;
+    }
+  };
+
+  nextBtn.addEventListener('click', () => {
+    nextSlide();
+    resetAutoplay();
+  });
+
+  prevBtn.addEventListener('click', () => {
+    prevSlide();
+    resetAutoplay();
+  });
+
+  track.addEventListener('transitionend', handleTransitionEnd);
+
+  /* ========= AUTOPLAY ========= */
+  let autoplayInterval;
+  const autoplaySpeed = 3000; // 3 seconds
+
+  const startAutoplay = () => {
+    autoplayInterval = setInterval(nextSlide, autoplaySpeed);
+  };
+
+  const stopAutoplay = () => {
+    clearInterval(autoplayInterval);
+  };
+
+  const resetAutoplay = () => {
+    stopAutoplay();
+    startAutoplay();
+  };
+
+  // Pause on hover
+  track.addEventListener('mouseenter', stopAutoplay);
+  track.addEventListener('mouseleave', startAutoplay);
+
+  // Start autoplay
+  startAutoplay();
+});
+</script>
+
+
+{% schema %}
+{
+  "name": "Before & After",
+  "settings": [
+    {
+      "type": "richtext",
+      "id": "heading",
+      "label": "Section heading"
+    },
+    {
+      "type": "color",
+      "id": "bg-color",
+      "label": "Add background color here"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "review",
+      "name": "Review Item",
+      "settings": [
+        { "type": "image_picker", "id": "before_image", "label": "Before image" },
+        { "type": "text", "id": "before_label", "label": "Before label", "default": "Before" },
+        { "type": "image_picker", "id": "after_image", "label": "After image" },
+        { "type": "text", "id": "after_label", "label": "After label", "default": "After" },
+        { "type": "image_picker", "id": "flag_image", "label": "Flag icon" },
+        { "type": "text", "id": "name", "label": "Customer name" },
+        { "type": "text", "id": "title", "label": "Review title" },
+        { "type": "richtext", "id": "text", "label": "Review text" },
+        { "type": "image_picker", "id": "product_image", "label": "Product image" },
+        { "type": "text", "id": "product_name", "label": "Product name" },
+        { "type": "url", "id": "product_link", "label": "Product link" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Before & After",
+      "category": "Custom Sections"
+    }
+  ]
+}
+{% endschema %}

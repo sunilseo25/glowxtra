@@ -1,0 +1,195 @@
+<style>
+ /* ============= IMAGE WITH TEXT + VIDEO SECTION ============= */
+
+.section-image-with-text {
+  background-color: var(--color-bg, #ffffff);
+  color: var(--color-text, #515f69);
+  padding: 60px 20px;
+}
+
+.section-image-with-text .container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.image-with-text-grid {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 40px;
+}
+
+/* ---------- Text Content ---------- */
+.image-with-text__content {
+  flex: 1 1 45%;
+  min-width: 300px;
+}
+
+.image-with-text__content h2,
+.image-with-text__content .h3 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  line-height: 1.2;
+  color: var(--color-text, #333);
+}
+
+.image-with-text__content .rte {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--color-text, #515f69);
+}
+
+.image-with-text__content strong {
+  color: var(--color-text, #333);
+}
+
+/* ---------- Video Block ---------- */
+.image-with-text__video {
+  flex: 1 1 45%;
+  min-width: 300px;
+  text-align: center;
+}
+
+.image-with-text__video video {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  display: block;
+  background: #000;
+}
+
+/* ---------- Responsive Layout ---------- */
+@media screen and (max-width: 992px) {
+  .image-with-text-grid {
+    flex-direction: column;
+    gap: 30px;
+  }
+
+  .image-with-text__content,
+  .image-with-text__video {
+    flex: 1 1 100%;
+    text-align: center;
+  }
+
+  .image-with-text__content h2 {
+    font-size: 1.8rem;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .section-image-with-text {
+    padding: 40px 15px;
+  }
+
+  .image-with-text__content h2 {
+    font-size: 1.6rem;
+  }
+
+  .image-with-text__content .rte {
+    font-size: 0.95rem;
+  }
+}
+   
+    </style>
+    
+{% comment %}
+  Section: Image With Text + Video
+  Description: Displays a video (autoplay, loop, muted) alongside text content.
+{% endcomment %}
+
+<section class="section-image-with-text" style="--color-bg: {{ section.settings.bg_color }}; --color-text: {{ section.settings.text_color }}">
+  <div class="row grid">
+    <div class="small-12 columns">
+      <div class="image-with-text grid--image-medium text_first text-left section-spacing section-spacing--disable-bottom">
+
+        <!-- Image/Video -->
+        <div class="image-with-text__image image-with-text__inner">
+          <div class="image-with-text__image-media aspect-ratio aspect-ratio--adapt" style="--ratio-percent: 100%;">
+            {% if section.settings.video_url != blank %}
+              <video
+                playsinline
+                autoplay
+                loop
+                muted
+                preload="metadata"
+                poster="{{ section.settings.poster | img_url: '690x' }}"
+              >
+                <source src="{{ section.settings.video_url }}" type="video/mp4">
+                {% if section.settings.poster != blank %}
+                  <img src="{{ section.settings.poster | img_url: '690x' }}" alt="{{ section.settings.heading | escape }}">
+                {% endif %}
+              </video>
+            {% elsif section.settings.poster != blank %}
+              <img src="{{ section.settings.poster | img_url: '690x' }}" alt="{{ section.settings.heading | escape }}">
+            {% endif %}
+          </div>
+        </div>
+
+        <!-- Text Content -->
+        <div class="image-with-text__content image-with-text__inner">
+          <div class="image-with-text__content--inner">
+            {% if section.settings.heading != blank %}
+              <h3 class="h3">{{ section.settings.heading }}</h3>
+            {% endif %}
+            {% if section.settings.text != blank %}
+              <div class="rte description-size--medium">
+                {{ section.settings.text }}
+              </div>
+            {% endif %}
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Image with Text + Video",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "FITNESS FOR YOUR FACE"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Description",
+      "default": "<p><strong>WHAT IT IS</strong>: Microcurrent is a low-level current that mimics the body’s natural bioelectric signals. It helps stimulate facial muscles and skin cells, boosting the energy cells need to function and repair. This process supports improved tone, firmness, and circulation, helping to reduce the appearance of fine lines, enhance contours, and promote collagen and elastin production over time.*</p><p>*Based on third-party clinical studies of microcurrent technology, not specific to NuFACE devices.</p>"
+    },
+    {
+  "type": "video",
+  "id": "video_file",
+  "label": "Upload Video"
+},
+    {
+      "type": "image_picker",
+      "id": "poster",
+      "label": "Video Poster Image"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#515f69"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Image with Text + Video",
+      "category": "Media"
+    }
+  ]
+}
+{% endschema %}

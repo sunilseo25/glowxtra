@@ -1,0 +1,96 @@
+<script src="{{ 'color-js.js' | asset_url }}" defer="defer"></script>
+<div class="custom-three-grid-sec">
+		<div class="container">
+          <div class="custom-three-grid-sec-head">
+			  <div class="row align-items-center">
+              {% if section.settings.title!=blank %}
+                <div class="col-md-12">
+                    <div class="sub-heading text-center">
+                        <h2>{{ section.settings.title }}</h2>
+                    </div>
+                </div>
+            {% endif %}
+              </div>
+            </div>
+            <div class="new-collection-wraper custom-bundlecls">
+                 {% for block in section.blocks %}
+                    <div class="row">
+        			<div class="col-lg-6">
+        					<div class="row">
+                              {%- for product in block.settings.collection.products limit: 1-%}
+        						<div class="col-md-12">
+        							<div class="featured-collection-grid__product">
+                          {% render 'product-item',
+                            prod: product,
+                            collection: section.settings.collection,
+                            aspect_ratio: settings.product_listing_aspect_ratio,
+                            product_columns: section.settings.columns
+                          %}
+                        </div>
+        						</div>
+        					{% endfor %}
+        					</div>
+        			</div>
+        			<div class="col-lg-6">
+                          {% if block.settings.image != blank %}
+        					<figure>
+        						<img src="{{block.settings.image | img_url:'master' }}" alt=""/>
+        					</figure>
+                       {% endif %}
+        				</div>
+                    </div>
+                {% endfor %}
+            </div>
+		</div>
+	</div>
+<style>
+  .custom-bundlecls .show-product-quickview { display:none; }
+</style>
+
+{% schema %}
+  {
+    "name": "shop-list2",
+    "class": "shop-list",
+    "disabled_on": {
+    "groups": ["header", "custom.overlay"],
+    "templates": ["password"]
+  },
+    "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title"
+        }
+       
+      ],
+    "blocks": [
+      {
+       "name": "Shop",
+       "type": "shop",
+       "settings": [
+          {
+            "id": "collection",
+            "type": "collection",
+            "label": "t:sections.collection_sections_shared.settings.collection.label"
+          },
+          {
+             "type": "image_picker",
+             "id": "image",
+             "label": "Image"
+          }
+        ]
+      }
+    ],
+   "presets": [
+        {
+          "name": "Shop List"
+        }
+    ]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

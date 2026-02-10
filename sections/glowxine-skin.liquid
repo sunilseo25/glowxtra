@@ -1,0 +1,159 @@
+<style>
+.glowxine-skin-care {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: 20px;
+}
+
+.product-item {
+  display: flex;
+  width: 100%;
+  margin-bottom: 30px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.product-info {
+  width: 50%;
+  padding: 20px;
+}
+
+.product-title {
+  font-size: 22px;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.product-description {
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 20px;
+}
+
+.product-price {
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+.original-price {
+  text-decoration: line-through;
+  color: #888;
+}
+
+.discounted-price {
+  color: #e74c3c;
+  font-weight: bold;
+}
+
+.product-form {
+  margin-top: 20px;
+}
+
+.before-after-images {
+  width: 50%;
+  padding: 20px;
+}
+
+.before-after-images div {
+  margin-bottom: 20px;
+}
+
+.before-image img, .after-image img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.before-after-images h3 {
+  text-align: center;
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+</style>
+
+<section class="glowxine-skin-care">
+  <div class="container">
+    <div class="product-item">
+      
+      <!-- Left Side: Product Information -->
+      <div class="product-info">
+        {% if section.settings.product %}
+          <h2 class="product-title">{{section.settings.product.title }}</h2>
+          <p class="product-description">{{section.settings.product.description }}</p>
+          
+          <div class="product-price">
+            {% if settings.product.compare_at_price > section.settings.product.price %}
+              <span class="original-price">{{section.settings.product.compare_at_price | money }}</span>
+              <span class="discounted-price">{{section.settings.product.price | money }}</span>
+            {% else %}
+              <span class="discounted-price">{{ section.settings.product.price | money }}</span>
+            {% endif %}
+          </div>
+          
+          <!-- Add to Cart or Buy Now Form -->
+          <div class="product-form">
+            <form action="{{ routes.cart_add_url }}" method="post" enctype="multipart/form-data">
+              <input type="hidden" name="id" value="{{ settings.product.variants.first.id }}">
+              <button type="submit" class="btn">Add to Cart</button>
+            </form>
+          </div>
+        {% else %}
+          <p>Product not available. Please select a product.</p>
+        {% endif %}
+      </div>
+      
+      <!-- Right Side: Before and After Images -->
+      <div class="before-after-images">
+        {% if section.settings.before_image %}
+          <div class="before-image">
+            <h3>Before</h3>
+            <img src="{{ section.settings.before_image | img_url: 'large' }}" alt="Before Image">
+          </div>
+        {% else %}
+          <p>No before image available.</p>
+        {% endif %}
+        
+        {% if section.settings.after_image %}
+          <div class="after-image">
+            <h3>After</h3>
+            <img src="{{  section.settings.after_image | img_url: 'large' }}" alt="After Image">
+          </div>
+        {% else %}
+          <p>No after image available.</p>
+        {% endif %}
+      </div>
+
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "GlowXine Skincare Product",
+  "settings": [
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Product"
+    },
+    {
+      "type": "image_picker",
+      "id": "before_image",
+      "label": "Before Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "after_image",
+      "label": "After Image"
+    }
+  ],
+  "presets": [
+    {
+      "name": "before-after products",
+      "category": "Custom"
+    }
+  ]
+}
+{% endschema %}

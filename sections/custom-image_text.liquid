@@ -1,0 +1,260 @@
+<section class="process-section">
+  <div class="container">
+    <div class="progress-wrapper">
+      <div class="process-left">
+        {% if section.settings.video != blank %}
+          <div class="process-video-wrap">
+            {{ section.settings.video | video_tag: autoplay: true, loop: true, muted: true, controls: false, playsinline: true, class: 'process-video', aria_label: section.settings.alt_text }}
+
+        
+
+            <div class="process-overlay">
+              <div class="overlay-text">
+                <p class="subheading">{{ section.settings.overlay_subheading }}</p>
+                <h3 class="overlay-heading">{{ section.settings.overlay_heading }}</h3>
+              </div>
+            </div>
+          </div>
+        {% endif %}
+      </div>
+
+      <div class="process-right">
+        <p class="process-subtitle">{{ section.settings.process_label }}</p>
+        <h2 class="process-heading">{{ section.settings.heading }}</h2>
+        <p class="process-description">{{ section.settings.text }}</p>
+
+        <ul class="process-list">
+          {% for block in section.blocks %}
+            {% if block.type == 'point' %}
+              <li>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                  <path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span>{{ block.settings.label }}</span>
+              </li>
+            {% endif %}
+          {% endfor %}
+        </ul>
+
+        {% if section.settings.button_label != blank %}
+          <a href="{{ section.settings.button_link }}" class="btn-primary btn btn--overlay btn--primary">{{ section.settings.button_label }}</a>
+        {% endif %}
+
+        {% if section.settings.bottom_text != blank %}
+          <p class="process-bottom">
+            {{ section.settings.bottom_text }}
+            <a href="{{ section.settings.bottom_link_url }}" class="bottom-link">{{ section.settings.bottom_link_label }}</a>
+          </p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+.process-section {
+  background: {{ section.settings.background_color }};
+  padding: 60px 0;
+}
+.process-section .container {
+  max-width: calc(var(--max-width) + calc(var(--space-outer) * 2));
+  margin: 0 auto;
+  padding: var(--spacing-10) var(--space-outer);
+}
+.progress-wrapper {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 50px;
+  align-items: center;
+}
+.progress-wrapper a.btn-primary.btn.btn--overlay.btn--primary {
+    width: 100%;
+    max-width: 210px;
+    border-radius: 0 !important;
+}
+.process-video-wrap {
+  position: relative;
+  overflow: hidden;
+}
+.process-video {
+  width: 100%;
+  height: 420px;
+  display: block;
+  object-fit: cover;
+}
+.process-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 100px;
+  background: linear-gradient(to top, #e2a4b16e, transparent);
+  color: white;
+}
+.overlay-text .subheading {
+  font-size: 14px;
+  opacity: 0.9;
+}
+.overlay-heading {
+  font-size: 24px;
+  font-weight: 500;
+  margin: 0;
+}
+.process-subtitle {
+  font-size: 16px;
+  color: {{ section.settings.subtitle-text_color }};
+  font-weight: 500;
+}
+.process-right p.process-bottom {
+    font-size: 15px;
+    font-style: italic;
+}
+.process-heading {
+  font-size: 36px;
+  color: {{ section.settings.title_color }};
+  margin: 10px 0 20px;
+  line-height: 1.3;
+  font-family: 'Lora';
+  margin-top: 0;
+}
+.process-description {
+  color: #555;
+  margin-bottom: 20px;
+}
+.process-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 30px;
+  gap: 10px 20px;
+}
+.process-list li {
+  display: flex;
+  align-items: center;
+  color: #333;
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+.process-list svg {
+  color: {{ section.settings.svg-color }};
+  margin-right: 8px;
+}
+.btn-primary {
+  background: #2e7153;
+  color: white;
+  padding: 14px 30px;
+  border-radius: 40px;
+  text-decoration: none;
+  display: inline-block;
+  font-weight: 500;
+}
+.btn-primary:hover {
+  background: #245b41;
+}
+.process-bottom {
+    margin-top: 15px;
+    color: #555;
+}
+.bottom-link {
+  color: {{ section.settings.bottom-color }};
+  font-weight: 600;
+  text-decoration: underline;
+  margin-left: 5px;
+}
+
+/* Unmute Button */
+.unmute-btn {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  background: rgba(0, 0, 0, 0.4);
+  border: none;
+  border-radius: 50%;
+  padding: 10px;
+  cursor: pointer;
+  transition: 0.3s ease;
+  z-index: 3;
+}
+.unmute-btn:hover {
+  background: rgba(0, 0, 0, 0.7);
+}
+.unmute-btn svg {
+  width: 24px;
+  height: 24px;
+}
+.unmute-btn.active path:first-child {
+  fill: #2e7153;
+}
+
+@media screen and (max-width: 768px) {
+  .progress-wrapper {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+  .process-overlay {
+    padding: 40px 20px;
+  }
+  .process-list {
+    grid-template-columns: 1fr;
+  }
+  .progress-wrapper a.btn-primary.btn.btn--overlay.btn--primary {
+    width: 100%;
+    max-width: 100%;
+}
+.process-description {
+  text-align: left;
+}
+.process-right h2.process-heading {
+    text-align: left;
+}
+}
+</style>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const video = document.querySelector(".process-video");
+  const unmuteBtn = document.querySelector(".unmute-btn");
+
+  if (unmuteBtn && video) {
+    unmuteBtn.addEventListener("click", () => {
+      video.muted = !video.muted;
+      unmuteBtn.classList.toggle("active", !video.muted);
+    });
+  }
+});
+</script>
+
+{% schema %}
+{
+  "name": "Process Section",
+  "settings": [
+    { "type": "video", "id": "video", "label": "Upload Video" },
+    {"type": "text","id": "alt_text","label": "Video alt / accessibility text"},
+    { "type": "color", "id": "background_color", "label": "Add Section Background" },
+    { "type": "text", "id": "overlay_subheading", "label": "Overlay Subheading", "default": "Our process" },
+    { "type": "color", "id": "subtitle-text_color", "label": "Add subtitle color here" },
+    { "type": "text", "id": "overlay_heading", "label": "Overlay Heading", "default": "Watch our procedure" },
+    { "type": "color", "id": "title_color", "label": "Add title color here" },
+    { "type": "color", "id": "svg-color", "label": "Add svg color here" },
+    { "type": "text", "id": "process_label", "label": "Top Label", "default": "Our Process" },
+    { "type": "richtext", "id": "heading", "label": "Heading" },
+    { "type": "textarea", "id": "text", "label": "Description", "default": "From preventive care to specialized treatments, our wide range of services is designed to support your health at every stage." },
+    { "type": "text", "id": "button_label", "label": "Button Label", "default": "Learn More" },
+    { "type": "url", "id": "button_link", "label": "Button Link" },
+    { "type": "text", "id": "bottom_text", "label": "Bottom Text", "default": "Your skin’s transformation starts here –" },
+    { "type": "color", "id": "bottom-color", "label": "Add bottom color here" },
+    { "type": "text", "id": "bottom_link_label", "label": "Bottom Link Label", "default": "Book Today!" },
+    { "type": "url", "id": "bottom_link_url", "label": "Bottom Link URL" }
+  ],
+  "blocks": [
+    {
+      "type": "point",
+      "name": "Feature Point",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Label", "default": "Expert Dermatologists" }
+      ]
+    }
+  ],
+  "max_blocks": 6,
+  "presets": [{ "name": "Process Section" }]
+}
+{% endschema %}

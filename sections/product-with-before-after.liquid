@@ -1,0 +1,171 @@
+<section class="product-before-after">
+  <div class="container">
+    <div class="pba-grid">
+
+      <!-- LEFT SIDE — PRODUCT INFO -->
+      <div class="pba-left">
+
+        {% comment %}
+        Product assignment:
+        1. Use product picker
+        2. If none selected, use manual product handle
+        {% endcomment %}
+
+        {% if section.settings.product %}
+          {% assign product = all_products[section.settings.product] %}
+        {% elsif section.settings.product_handle != blank %}
+          {% assign product = all_products[section.settings.product_handle] %}
+        {% endif %}
+
+        {% if product %}
+
+          {% if product.featured_image %}
+            <img class="product-img" src="{{ product.featured_image | img_url: '600x' }}" alt="{{ product.title }}">
+          {% endif %}
+
+          {% if product.images.size > 1 %}
+            <img class="product-img" src="{{ product.images[1] | img_url: '600x' }}" alt="{{ product.title }} second image">
+          {% endif %}
+
+          <h2 class="pba-title">{{ product.title }}</h2>
+
+          {% if product.description %}
+            <p class="pba-description">{{ product.description | strip_html | truncate: 200 }}</p>
+          {% endif %}
+
+          <p class="pba-price">
+            {{ product.price | money }}
+          </p>
+
+        {% else %}
+          <p>Please select a product or enter a product handle.</p>
+        {% endif %}
+      </div>
+
+      <!-- RIGHT SIDE — BEFORE/AFTER IMAGE -->
+      <div class="pba-right">
+        <div class="before-after-wrapper">
+          {% if section.settings.before_image %}
+            <div class="before-img">
+              <img src="{{ section.settings.before_image | img_url: '800x' }}" alt="Before">
+              <span class="label before-label">{{ section.settings.before_label }}</span>
+            </div>
+          {% endif %}
+
+          {% if section.settings.after_image %}
+            <div class="after-img">
+              <img src="{{ section.settings.after_image | img_url: '800x' }}" alt="After">
+              <span class="label after-label">{{ section.settings.after_label }}</span>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<style>
+.product-before-after .container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 40px 20px;
+}
+
+.pba-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 40px;
+}
+
+.pba-left, .pba-right {
+  flex: 1;
+  min-width: 300px;
+}
+
+.product-img {
+  width: 140px;
+  margin-bottom: 10px;
+}
+
+.before-after-wrapper {
+  position: relative;
+  display: flex;
+}
+
+.before-img, .after-img {
+  width: 50%;
+  position: relative;
+}
+
+.before-img img, .after-img img {
+  width: 100%;
+  display: block;
+}
+
+.label {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  padding: 6px 12px;
+  background: rgba(0,0,0,0.6);
+  color: #fff;
+  font-size: 14px;
+  border-radius: 4px;
+}
+</style>
+
+{% schema %}
+{
+  "name": "Product + Before/After",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Product Selection"
+    },
+    {
+      "id": "product",
+      "type": "product",
+      "label": "Select Product"
+    },
+    {
+      "id": "product_handle",
+      "type": "text",
+      "label": "Manual Product Handle",
+      "info": "If no product is selected above, this handle will be used."
+    },
+
+    {
+      "type": "header",
+      "content": "Before / After Images"
+    },
+    {
+      "id": "before_image",
+      "type": "image_picker",
+      "label": "Before Image"
+    },
+    {
+      "id": "after_image",
+      "type": "image_picker",
+      "label": "After Image"
+    },
+    {
+      "id": "before_label",
+      "type": "text",
+      "label": "Before Label",
+      "default": "Before"
+    },
+    {
+      "id": "after_label",
+      "type": "text",
+      "label": "After Label",
+      "default": "After"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product + Before/After"
+    }
+  ]
+}
+{% endschema %}

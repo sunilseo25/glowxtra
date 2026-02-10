@@ -1,0 +1,147 @@
+<style>
+  .how-to-use-section {
+    text-align: center;
+    padding: 30px;
+  }
+  .container {
+    max-width: calc(var(--max-width) + calc(var(--space-outer) * 2));
+    margin: 0 auto;
+    padding: var(--spacing-10) var(--space-outer);
+}
+  .how-to-use-image img {
+    max-width: 500px;
+    height: auto;
+    width: 100%;
+}
+.content-wrapper {
+    display: flex;
+    gap: 60px;
+    align-items: center;
+    background: {{ section.settings.bg_color }};
+    padding: 20px;
+}
+.instruction-wrapper .top-heading {
+    margin-bottom: 40px;
+}
+  .instructions {
+    margin-top: 20px;
+    text-align: left;
+    display: inline-block;
+    padding: 10px;
+  }
+
+  .icons {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin-top: 30px;
+    flex-direction: column;
+}
+
+  .icon img {
+    max-width: 30px;
+    margin-bottom: 5px;
+  }
+  
+  .icon p {
+    font-size: 14px;
+  }
+</style>
+
+<section class="how-to-use-section">
+<div class="container">
+    <div class="content-wrapper">
+  <div class="image-content">
+  <div class="how-to-use-image">
+    <img src="{{ section.settings.product_image | img_url: 'master' }}" alt="GlowXtra Wand" />
+  </div>
+  </div>
+  <div class="instruction-wrapper">
+  <div class="instructions">
+    <div class="top-heading">
+  <h2>{{ section.settings.headline_text }}</h2>
+  <p class="subheadline">{{ section.settings.subheadline_text }}</p>
+  </div>
+    <h3>How to Use:</h3>
+    <p>{{ section.settings.instructions | newline_to_br }}</p>
+  </div>
+</div>
+  <div class="icons">
+    {% if section.settings.boost_collagen_icon %}
+      <div class="icon">
+        <img src="path-to-your-collagen-icon.png" alt="Boosts Collagen" />
+      </div>
+    {% endif %}
+    {% if section.settings.reduces_redness_icon %}
+      <div class="icon">
+        <img src="path-to-your-reduces-redness-icon.png" alt="Reduces Redness" />
+      </div>
+    {% endif %}
+    {% if section.settings.dermatologist_icon %}
+      <div class="icon">
+        <img src="path-to-your-dermatologist-icon.png" alt="Recommended by Dermatologists" />
+      </div>
+    {% endif %}
+  </div>
+</div>
+</div>
+</section>
+{% schema %}
+{
+  "name": "How to Use GlowXtra Wand",
+  "settings": [
+    {
+      "type": "image_picker",
+      "label": "Product Image",
+      "id": "product_image"
+    },
+    {
+        "type": "color",
+        "id": "bg_color",
+        "label": "Add background color"
+    },
+    {
+      "type": "richtext",
+      "label": "How to Use Instructions",
+      "id": "instructions"
+    },
+    {
+      "type": "text",
+      "label": "Headline Text",
+      "id": "headline_text",
+      "default": "How to Use Your GlowXtra Wand"
+    },
+    {
+      "type": "text",
+      "label": "Subheadline Text",
+      "id": "subheadline_text",
+      "default": "Simple. Quick. Results you can see."
+    },
+    {
+      "type": "checkbox",
+      "label": "Show Collagen Boosting Icon",
+      "id": "boost_collagen_icon",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "label": "Show Reduces Redness Icon",
+      "id": "reduces_redness_icon",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "label": "Show Dermatologist Recommended Icon",
+      "id": "dermatologist_icon",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "How to Use GlowXtra Wands",
+      "category": "Custom"
+    }
+  ]
+}
+{% endschema %}
+

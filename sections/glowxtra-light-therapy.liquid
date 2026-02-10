@@ -1,0 +1,167 @@
+{% schema %}
+{
+  "name": "Glowxtra Dual Light",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "main_image",
+      "label": "Main Image"
+    },
+    {
+      "type": "text",
+      "id": "headline",
+      "label": "Headline",
+      "default": "SMART LIGHT. BEAUTIFUL SKIN."
+    },
+    {
+      "type": "text",
+      "id": "subheadline",
+      "label": "Subheadline",
+      "default": "The Smart Choice for Glowxtra Dual Light Therapy"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description",
+      "default": "<ul><li>💡 Clinically Proven – Red & blue LED improve wrinkles, acne, and tone.</li><li>🩺 Pro-Level Care – Dermatologist-inspired, made for daily use.</li><li>☀️ Dual Light Power – Red for rejuvenation, blue for clarity.</li><li>💧 Boosts Serums – Maximizes absorption for lasting glow.</li><li>🧠 Smart Design – Auto-timer and ergonomic comfort.</li></ul>"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button Label",
+      "default": "GRAB YOURS"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button Link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Glowxtra Light Therapy",
+      "category": "Custom Sections"
+    }
+  ]
+}
+{% endschema %}
+
+<section class="glowxtra-section">
+  <div class="glowxtra-container">
+    <div class="glowxtra-image">
+         <h2 class="glowxtra-headline">{{ section.settings.headline }}</h2>
+      {% if section.settings.main_image != blank %}
+        <img src="{{ section.settings.main_image | img_url: '800x' }}" alt="{{ section.settings.headline }}">
+      {% endif %}
+    </div>
+    <div class="glowxtra-content">
+      <h3 class="glowxtra-subheadline">{{ section.settings.subheadline }}</h3>
+      <div class="glowxtra-description">{{ section.settings.description }}</div>
+      {% if section.settings.button_label != blank %}
+  <a 
+    href="#" 
+    class="glowxtra-button btn btn--overlay btn--primary scroll-to-top-btn">
+    {{ section.settings.button_label }}
+  </a>
+{% endif %}
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const scrollButton = document.querySelector('.scroll-to-top-btn');
+  
+  if (scrollButton) {
+    scrollButton.addEventListener('click', function(event) {
+      event.preventDefault();
+      const target = document.querySelector('.product__top.product__primary');
+      
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth' });
+      } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    });
+  }
+});
+</script>
+
+    </div>
+  </div>
+</section>
+
+<style>
+.glowxtra-section {
+  background-color: #fff;
+  color: #4a3b2f;
+  font-family: 'lora';
+}
+.glowxtra-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 50px;
+}
+.glowxtra-container {
+    max-width: calc(var(--max-width) + calc(var(--space-outer) * 2));
+    margin: 0 auto;
+    padding: var(--spacing-10) var(--space-outer);
+}
+.glowxtra-image img {
+  max-width: 100%;
+}
+.glowxtra-content {
+    flex: 1 1 45%;
+    padding-top: 150px;
+}
+
+.glowxtra-headline {
+    letter-spacing: 1px;
+    font-weight: 500;
+    margin-bottom: 20px;
+    max-width: 360px;
+    font-size: 40px;
+    font-style: italic;
+}
+.glowxtra-subheadline {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+  color: #5a4635;
+}
+.glowxtra-description ul {
+  list-style: none;
+  padding-left: 0;
+}
+.glowxtra-description li {
+    margin-bottom: 10px;
+    line-height: 1.6;
+    font-size: 16px;
+    font-family: 'Montserrat';
+}
+.glowxtra-button {
+  display: inline-block;
+  margin-top: 25px;
+  padding: 12px 30px;
+  border: 1px solid #c4a68a;
+  color: #4a3b2f;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+.glowxtra-button:hover {
+  background-color: #c4a68a;
+  color: #fff;
+}
+@media (max-width: 768px) {
+  .glowxtra-container {
+    flex-direction: column;
+  }
+  .glowxtra-content {
+    text-align: center;
+  }
+  .glowxtra-content {
+    padding-top: 0px;
+}
+.glowxtra-description li {
+    text-align: left;
+}
+}
+</style>

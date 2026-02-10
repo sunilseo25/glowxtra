@@ -1,0 +1,137 @@
+<style>
+.image-banner-section {
+  position: relative;
+  width: 100%;
+}
+.image-banner-section.page-width {
+    max-width: calc(var(--max-width) + calc(var(--space-outer) * 2));
+    margin: 0 auto;
+    padding: var(--spacing-10) var(--space-outer);
+}
+.image-banner {
+  position: relative;
+  background-repeat: no-repeat;
+}
+.banner-content {
+  width: 100%;
+  text-align: center;
+  padding: 0 1rem;
+}
+@media (min-width: 768px) {
+  .banner-content {
+    padding: 0 2rem;
+  }
+}
+</style>
+
+<section class="image-banner-section {% if section.settings.layout_width == 'container' %}page-width{% endif %}">
+  <div 
+    class="image-banner relative flex items-center justify-{{ section.settings.content_alignment }}"
+    style="height: {{ section.settings.banner_height }}vh; background-image: url('{{ section.settings.banner_image | image_url: width: 2000 }}'); background-position: center;"
+  >
+    <div 
+      class="overlay absolute inset-0" 
+      style="background-color: {{ section.settings.overlay_color }}; opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }};"
+    ></div>
+    <div class="banner-content relative z-10 text-{{ section.settings.content_alignment }}">
+      {% if section.settings.heading != blank %}
+        <h2 class="text-4xl md:text-5xl font-bold text-white mb-4">{{ section.settings.heading }}</h2>
+      {% endif %}
+      {% if section.settings.subheading != blank %}
+        <p class="text-lg text-white mb-6">{{ section.settings.subheading }}</p>
+      {% endif %}
+      {% if section.settings.button_label != blank %}
+        <a href="{{ section.settings.button_link }}" class="btn btn--primary bg-white text-black px-6 py-3 rounded-full font-medium hover:bg-black hover:text-white transition">
+          {{ section.settings.button_label }}
+        </a>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Image Banner",
+  "settings": [
+    {
+      "type": "select",
+      "id": "layout_width",
+      "label": "Layout Width",
+      "default": "full",
+      "options": [
+        { "value": "full", "label": "Full Width" },
+        { "value": "container", "label": "Container" }
+      ]
+    },
+    {
+      "type": "image_picker",
+      "id": "banner_image",
+      "label": "Banner Image"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Your Banner Heading"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Your banner subtext goes here."
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button Label",
+      "default": "Shop Now"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button Link"
+    },
+    {
+      "type": "select",
+      "id": "content_alignment",
+      "label": "Content Alignment",
+      "default": "center",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "banner_height",
+      "label": "Banner Height (in vh)",
+      "min": 40,
+      "max": 100,
+      "step": 5,
+      "default": 70
+    },
+    {
+      "type": "color",
+      "id": "overlay_color",
+      "label": "Overlay Color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Overlay Opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "default": 30
+    }
+  ],
+  "presets": [
+    {
+      "name": "Image Banner"
+    }
+  ]
+}
+{% endschema %}
+

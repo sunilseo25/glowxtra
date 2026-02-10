@@ -1,0 +1,116 @@
+<style>
+.info-section {
+  width: 100%;
+  padding: 30px 0;
+  background-color: #f9f9f9;
+  display: flex;
+  justify-content: center;
+}
+
+.info-container {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px;
+  width: 100%;  /* Ensures the container uses the full width available */
+}
+
+.info-item {
+  text-align: center;
+  flex: 1;
+  min-width: 200px;
+}
+
+.info-item h3 {
+  font-size: 18px;
+  font-weight: bold;
+  margin-top: 10px;
+  color: #333;
+}
+
+.info-item p {
+  font-size: 14px;
+  color: #555;
+}
+
+.icon {
+  width: 50px;
+  height: 50px;
+  margin-bottom: 10px;
+}
+
+</style>
+ 
+<section class="info-section" style="max-width: {{ section.settings.container_width }};">
+  <div class="info-container">
+    {% for block in section.blocks %}
+      <div class="info-item">
+        <img src="{{ block.settings.icon }}" alt="{{ block.settings.title }}" class="icon">
+        <h3>{{ block.settings.title }}</h3>
+        <p>{{ block.settings.description }}</p>
+      </div>
+    {% endfor %}
+  </div>
+</section>
+{% schema %}
+{
+  "name": "Custom Info Section",
+  "settings": [
+    {
+      "type": "select",
+      "label": "Container Width",
+      "id": "container_width",
+      "options": [
+        {
+          "value": "100%",
+          "label": "Full Width"
+        },
+        {
+          "value": "1200px",
+          "label": "1200px"
+        },
+        {
+          "value": "1400px",
+          "label": "1400px"
+        },
+        {
+          "value": "1600px",
+          "label": "1600px"
+        }
+      ],
+      "default": "1200px"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "info_block",
+      "name": "Info Block",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Icon",
+        },
+        {
+          "type": "text",
+          "label": "Title",
+          "id": "title",
+          "default": "FDA-CLEARED & CLINICALLY PROVEN:"
+        },
+        {
+          "type": "textarea",
+          "label": "Description",
+          "id": "description",
+          "default": "Technology that delivers real, lasting results."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom Info Section",
+      "category": "Custom"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,191 @@
+<style>
+.benefits-section {
+    background-color: {{ section.settings.bg-color }};
+    text-align: center;
+    position: relative;
+}
+.benefits-section .container {
+    max-width: calc(var(--max-width) + calc(var(--space-outer) * 2));
+    margin: 0 auto;
+    padding: var(--spacing-10) var(--space-outer);
+}
+
+.benefits-header .subtitle {
+    font-size: 16px;
+    opacity: 0.9;
+    margin-bottom: 0px;
+}
+
+.benefits-header .title {
+    font-size: 36px;
+    margin-bottom: 10px;
+    font-family: 'Lora';
+}
+
+.benefits-header .desc {
+  max-width: 600px;
+  margin: 0 auto 60px;
+  font-size: 16px;
+  opacity: 0.85;
+}
+
+.benefits-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 40px;
+}
+
+.benefits-column {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  flex: 1;
+  min-width: 250px;
+}
+
+.benefit-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  text-align: left;
+}
+
+.benefit-icon {
+    width: 50px;
+    height: 50px;
+    padding: 0px;
+}
+
+.benefit-text h4 {
+    font-size: 20px;
+    margin: 0 0 5px;
+    font-family: 'Lora';
+}
+
+.benefit-text p {
+  font-size: 14px;
+  opacity: 0.85;
+  margin: 0;
+}
+
+.benefits-image .image-wrap {
+  width: 280px;
+  height: 380px;
+  border-radius: 50% / 35%;
+  overflow: hidden;
+}
+
+.benefits-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.benefits-image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+{% comment %} .benefits-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    justify-content: center;
+} {% endcomment %}
+
+@media screen and (max-width: 992px) {
+  .benefits-content {
+    flex-direction: column;
+  }
+  .benefits-image {
+    order: -1;
+  }
+  .benefits-header .title {
+    font-size: 25px;
+    margin-bottom: 10px;
+    font-family: 'Lora';
+}
+.benefits-section {
+    padding: 0;
+}
+}
+</style>
+
+<section class="benefits-section">
+  <div class="container">
+    <div class="benefits-header">
+      <p class="subtitle">{{ section.settings.subtitle }}</p>
+      <h2 class="title">{{ section.settings.title }}</h2>
+      <p class="desc">{{ section.settings.description }}</p>
+    </div>
+
+    <div class="benefits-content">
+      <!-- Left Column (first 2 blocks) -->
+      <div class="benefits-column left">
+        {% for block in section.blocks limit: 2 %}
+          <div class="benefit-item">
+            {% if block.settings.icon != blank %}
+              <img src="{{ block.settings.icon | img_url: '100x' }}" alt="{{ block.settings.title }}" class="benefit-icon">
+            {% endif %}
+            <div class="benefit-text">
+              <h4>{{ block.settings.title }}</h4>
+              <p>{{ block.settings.text }}</p>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+
+      <!-- Center Image -->
+      <div class="benefits-image">
+        {% if section.settings.center_image != blank %}
+          <div class="image-wrap">
+            <img src="{{ section.settings.center_image | img_url: '600x' }}" alt="Benefits Image">
+          </div>
+        {% endif %}
+      </div>
+
+      <!-- Right Column (next 2 blocks) -->
+      <div class="benefits-column right">
+        {% for block in section.blocks offset: 2 limit: 2 %}
+          <div class="benefit-item">
+            {% if block.settings.icon != blank %}
+              <img src="{{ block.settings.icon | img_url: '100x' }}" alt="{{ block.settings.title }}" class="benefit-icon">
+            {% endif %}
+            <div class="benefit-text">
+              <h4>{{ block.settings.title }}</h4>
+              <p>{{ block.settings.text }}</p>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Benefits Section",
+  "settings": [
+    { "type": "color", "id": "bg-color", "label": "Add Background-color" },
+    { "type": "text", "id": "subtitle", "label": "Subtitle", "default": "Our Benefits" },
+    { "type": "richtext", "id": "title", "label": "Heading" },
+    { "type": "textarea", "id": "description", "label": "Description", "default": "Experience personalized care, advanced treatments, and visible results with our expert dermatology services." },
+    { "type": "image_picker", "id": "center_image", "label": "Center Image" }
+  ],
+  "blocks": [
+    {
+      "type": "benefit",
+      "name": "Benefit Item",
+      "settings": [
+        { "type": "image_picker", "id": "icon", "label": "Icon" },
+        { "type": "text", "id": "title", "label": "Title", "default": "Expert Dermatologists" },
+        { "type": "textarea", "id": "text", "label": "Description", "default": "Our team consists of board-certified dermatologists with experience." }
+      ]
+    }
+  ],
+  "max_blocks": 4,
+  "presets": [
+    { "name": "Benefits Section (2x2 Layout)", "category": "Content" }
+  ]
+}
+{% endschema %}

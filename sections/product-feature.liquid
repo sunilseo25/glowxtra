@@ -1,0 +1,475 @@
+<style>
+.product-feature {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 3rem;
+}
+section.product-feature_wrapper {
+    padding: 60px 0;
+    background: {{ section.settings.background_color }};
+}
+.product-feature.container {
+    max-width: calc(var(--max-width) + calc(var(--space-outer) * 2));
+    margin: 0 auto;
+    padding: var(--spacing-10) var(--space-outer);
+}
+.product-feature__info {
+  flex: 1 1 45%;
+  max-width: 500px;
+}
+
+.product-feature__image {
+  flex: 1 1 45%;
+  text-align: center;
+}
+
+.product-feature__image img {
+  max-width: 100%;
+  border-radius: 12px;
+}
+
+.product-feature__title {
+    font-size: 25px;
+    margin-bottom: 0.25rem;
+    font-family: 'Lora';
+    font-weight: 600;
+}
+
+.product-feature__subtitle {
+  font-size: 1.2rem;
+  color: #555;
+  margin-bottom: 1.5rem;
+}
+
+.product-feature__price {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #c46a84;
+    margin-bottom: 0.5rem;
+}
+
+.product-feature__availability {
+  color: #4caf50;
+  font-weight: 500;
+  margin-bottom: 1rem;
+}
+
+/* Variant Swatches / Buttons */
+.variant-options {
+    margin-bottom: 1.5rem;
+    display: none;
+}
+
+.variant-label {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.variant-swatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.variant-swatch {
+  border: 2px solid transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.2s ease;
+  text-align: center;
+}
+
+.variant-swatch.selected {
+    border-color: #d6a1b6;
+}
+
+.variant-swatch img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.variant-button {
+  padding: 0.6rem 1rem;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  background: #fff;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.variant-button.selected {
+    border-color: #c46a84;
+    background: #ffe4ef;
+    color: #c46a84;
+}
+
+/* Button */
+.btn--primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #e91e63;
+  color: #fff;
+  padding: 0.9rem 2rem;
+  border-radius: 30px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  margin-top: 1.5rem;
+}
+
+.btn--primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Accordion */
+.accordion {
+  margin-top: 2rem;
+  border-top: 1px solid #ddd;
+}
+
+.accordion-item {
+  border-bottom: 1px solid #ddd;
+}
+
+.accordion-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.accordion-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease, padding 0.3s ease;
+  color: #555;
+}
+.product-feature__info .accordion .custom-link {
+    padding: 1rem 0;
+    text-align: left;
+}
+.accordion .accordion-item .accordion-content ul {
+    text-align: left;
+}
+.product-feature__info .accordion .custom-link a.custom-links {
+    font-weight: 600;
+    text-decoration: underline;
+}
+
+.accordion-item.active .accordion-content {
+  max-height: 500px;
+  padding-bottom: 1rem;
+}
+.product-feature__info .accordion .custom-link a.custom-link:hover {
+    text-decoration: none;
+}
+
+
+/* Mobile */
+@media (max-width: 768px) {
+  .product-feature {
+    flex-direction: column-reverse;
+    text-align: center;
+  }
+  .product-feature__info {
+    max-width: 100%;
+  }
+  section.product-feature_wrapper {
+    padding: 0px 0;
+}
+  .variant-swatches {
+    justify-content: center;
+  }
+}
+</style>
+<section class="product-feature_wrapper">
+<div class="product-feature container">
+  {% if section.settings.product != blank %}
+    {% assign product = all_products[section.settings.product] %}
+    {% assign first_variant = product.selected_or_first_available_variant %}
+
+    <div class="product-feature__info" data-product-id="{{ first_variant.id }}">
+      <h2 class="product-feature__title">{{ product.title }}</h2>
+      {% if product.metafields.custom.subtitle %}
+        <p class="product-feature__subtitle">{{ product.metafields.custom.subtitle }}</p>
+      {% endif %}
+      <p class="product-feature__availability">
+        {% if product.available %}
+          In stock
+        {% else %}
+          Out of stock
+        {% endif %}
+      </p>
+
+      <p class="product-feature__price" id="product-price">{{ first_variant.price | money }}</p>
+
+      {% if product.options.size > 0 %}
+        <div class="variant-options">
+          <span class="variant-label">Choose {{ product.options_with_values.first.name | downcase }}:</span>
+          <div class="variant-swatches">
+            {% for variant in product.variants %}
+              {% if variant.image %}
+                <div class="variant-swatch {% if forloop.first %}selected{% endif %}"
+                     data-variant-id="{{ variant.id }}"
+                     data-image="{{ variant.image | img_url: '800x' }}"
+                     data-price="{{ variant.price | money }}"
+                     data-available="{{ variant.available }}"
+                     data-option="{{ variant.option1 }}">
+                  <img src="{{ variant.image | img_url: '200x' }}" alt="{{ variant.title }}">
+                </div>
+              {% else %}
+                <div class="variant-button {% if forloop.first %}selected{% endif %}"
+                     data-variant-id="{{ variant.id }}"
+                     data-price="{{ variant.price | money }}"
+                     data-available="{{ variant.available }}"
+                     data-option="{{ variant.option1 }}">
+                  {{ variant.option1 }}
+                </div>
+              {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+      {% endif %}
+
+      {% if product.available %}
+  <button 
+  type="button"
+  class="product-form__cart-submit btn btn--medium btn--full btn--primary scroll-to-top-btn">
+  Add to cart
+</button>
+{% else %}
+  <button class="btn--primary" disabled>Out of stock</button>
+{% endif %}
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const scrollButtons = document.querySelectorAll('.scroll-to-top-btn');
+
+  scrollButtons.forEach(button => {
+    button.addEventListener('click', function(event) {
+      event.preventDefault();
+
+      // Smooth scroll to top of product section
+      const target = document.querySelector('.product__top.product__primary');
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth' });
+      } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    });
+  });
+});
+</script>
+
+
+      <div class="accordion">
+        {% for block in section.blocks %}
+          {% if block.settings.title !=blank %}
+          <div class="accordion-item">
+            <div class="accordion-header">
+              {{ block.settings.title }} <span>+</span>
+            </div>
+         
+            {% if block.settings.content !=blank %}
+            <div class="accordion-content">
+              {{ block.settings.content }}
+            </div>
+          {% endif %}
+          </div>
+           {% endif %}
+           {% if block.settings.custom_link_url !=blank  %}
+           <div class="custom-link">
+          <a href="{{ block.settings.custom_link_url }}" class="custom-links"
+  {% if block.settings.open_in_new_tab %}target="_blank" rel="noopener noreferrer"{% endif %}>
+  {{ block.settings.custom_links_text }}
+</a>
+</div>
+{% endif %}
+{% endfor %}
+      </div>
+    </div>
+
+    <div class="product-feature__image">
+      {% if product.featured_image %}
+        <img id="product-main-image" src="{{ product.featured_image | img_url: '800x' }}" alt="{{ product.title }}">
+      {% endif %}
+    </div>
+  {% else %}
+    <p>Please select a product in the section settings.</p>
+  {% endif %}
+  </div>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Accordion
+  document.querySelectorAll('.accordion-header').forEach(header => {
+    header.addEventListener('click', () => {
+      const item = header.parentElement;
+      item.classList.toggle('active');
+    });
+  });
+
+  const swatches = document.querySelectorAll('.variant-swatch, .variant-button');
+  const mainImg = document.getElementById('product-main-image');
+  const priceEl = document.getElementById('product-price');
+  const addBtn = document.querySelector('.add-to-cart-btn');
+  const availabilityEl = document.querySelector('.product-feature__availability');
+
+  swatches.forEach(swatch => {
+    swatch.addEventListener('click', () => {
+      swatches.forEach(s => s.classList.remove('selected'));
+      swatch.classList.add('selected');
+
+      const variantId = swatch.dataset.variantId;
+      const newPrice = swatch.dataset.price;
+      const available = swatch.dataset.available === "true";
+
+      // Update price and button
+      if (priceEl) priceEl.textContent = newPrice;
+      addBtn.dataset.variantId = variantId;
+      addBtn.disabled = !available;
+      addBtn.textContent = available ? 'Add to cart' : 'Out of stock';
+      availabilityEl.textContent = available ? 'In stock' : 'Out of stock';
+
+      // Update main image (if exists)
+      if (swatch.dataset.image && mainImg) {
+        mainImg.src = swatch.dataset.image;
+      }
+    });
+  });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+  const addToCartBtn = document.querySelector('.add-to-cart-btn');
+
+  if (addToCartBtn) {
+    addToCartBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+
+      const variantId = this.getAttribute('data-variant-id');
+      const quantity = 1; // can be dynamic if you have a quantity input
+
+      fetch('/cart/add.js', {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json',
+          'X-Requested-With': 'XMLHttpRequest'
+        },
+        body: JSON.stringify({
+          id: variantId,
+          quantity: quantity
+        })
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Added to cart:', data);
+
+        // Update cart drawer (Dawn-compatible)
+        fetch('/?sections=cart-drawer')
+          .then(response => response.json())
+          .then(cartSections => {
+            const parser = new DOMParser();
+            const newDrawerHTML = parser.parseFromString(cartSections['cart-drawer'], 'text/html').querySelector('#CartDrawer').innerHTML;
+
+            const cartDrawer = document.querySelector('#CartDrawer');
+            if (cartDrawer) {
+              cartDrawer.innerHTML = newDrawerHTML;
+              cartDrawer.classList.add('is-active');
+              document.body.classList.add('overflow-hidden'); // prevent scrolling when open
+            }
+          });
+
+        // Optional: update cart badge count
+        fetch('/cart.js')
+          .then(res => res.json())
+          .then(cart => {
+            const cartCount = document.querySelector('.cart-count');
+            if (cartCount) cartCount.textContent = cart.item_count;
+          });
+      })
+      .catch(error => {
+        console.error('Error adding to cart:', error);
+        alert('There was a problem adding this item.');
+      });
+    });
+  }
+});
+</script>
+
+{% schema %}
+{
+  "name": "Product Feature",
+  "settings": [
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Select Product"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Add Background-color Here"
+    },
+  ],
+  "blocks": [
+    {
+      "type": "accordion",
+      "name": "Accordion Item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Accordion Title",
+          "default": "Accordion Title"
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "Accordion Content",
+          "default": "<p>Accordion content goes here.</p>"
+        },
+        {
+  "type": "text",
+  "id": "custom_links_text",
+  "label": "Link Text"
+},
+{
+  "type": "url",
+  "id": "custom_link_url",
+  "label": "Link URL"
+},
+{
+  "type": "checkbox",
+  "id": "open_in_new_tab",
+  "label": "Open in new tab"
+}
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product Feature",
+      "category": "Product",
+      "blocks": [
+        { "type": "accordion", "settings": { "title": "WHAT MAKES IT SPECIAL?", "content": "<p>Describe what makes your product unique.</p>" } },
+        { "type": "accordion", "settings": { "title": "WHAT’S INCLUDED?", "content": "<p>List the items included in your product package.</p>" } },
+        { "type": "accordion", "settings": { "title": "USER MANUAL", "content": "<p><a href='#' target='_blank'>Download PDF</a></p>" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

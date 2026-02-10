@@ -1,0 +1,193 @@
+<style>
+.before-after-section {
+  background: #fff;
+}
+.before-after-content {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 40px;
+}
+.before-after-section .container {
+max-width: calc(var(--max-width) + calc(var(--space-outer) * 2));
+margin: 0 auto;
+padding: var(--spacing-10) var(--space-outer);
+}
+.before-after-images {
+  display: flex;
+  gap: 20px;
+  flex: 1 1 45%;
+}
+.before-after-images .image-block {
+    text-align: center;
+    position: relative;
+}
+.before-after-images img {
+  width: 100%;
+}
+.image-caption {
+    font-size: 15px;
+    color: #fff;
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    font-family: 'Lora';
+    background: #c46a84;
+    padding: 6px;
+    width: 100px;
+    letter-spacing: 1.5px;
+}
+.results-text {
+  flex: 1 1 50%;
+}
+.results-text h3 {
+    text-transform: uppercase;
+    font-size: 13px;
+    letter-spacing: 1px;
+    color: #cb3b64;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+.results-text h2 {
+    font-size: 28px;
+    margin-bottom: 20px;
+    font-family: 'Lora';
+}
+.results-columns {
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+.results-columns .result {
+  flex: 1 1 45%;
+  margin-bottom: 20px;
+}
+.results-columns .result p {
+    margin-bottom: 12px;
+    font-size: 20px;
+    line-height: 1.5;
+}
+.results-columns .result strong {
+  color: #000;
+}
+@media (max-width: 768px) {
+  .before-after-content {
+    flex-direction: column;
+  }
+  .results-columns {
+    flex-direction: column;
+  }
+  .results-columns .result {
+    flex: 1 1 100%;
+  }
+}
+
+</style>
+<!-- sections/before-after-results.liquid -->
+<section class="before-after-section">
+  <div class="container">
+    <div class="before-after-content">
+      <div class="before-after-images">
+        <div class="image-block">
+          <img src="{{ section.settings.before_image | image_url }}" alt="Before" />
+          <p class="image-caption">{{ section.settings.before_label }}</p>
+        </div>
+        <div class="image-block">
+          <img src="{{ section.settings.after_image | image_url }}" alt="After" />
+          <p class="image-caption">{{ section.settings.after_label }}</p>
+        </div>
+      </div>
+
+      <div class="results-text">
+        <h3>{{ section.settings.subheading }}</h3>
+        <h2>{{ section.settings.heading }}</h2>
+        <div class="results-columns">
+          {% for block in section.blocks %}
+            <div class="result">
+              {{ block.settings.result_content }}
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+{% schema %}
+{
+  "name": "Before & After Results",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "before_image",
+      "label": "Before image"
+    },
+    {
+      "type": "text",
+      "id": "before_label",
+      "label": "Before label",
+      "default": "Before"
+    },
+    {
+      "type": "image_picker",
+      "id": "after_image",
+      "label": "After image"
+    },
+    {
+      "type": "text",
+      "id": "after_label",
+      "label": "After label",
+      "default": "After"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "BEFORE & AFTER"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Clinical results"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "result_item",
+      "name": "Result",
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "result_content",
+          "label": "Result content",
+          "default": "<p><strong>Significantly reduces</strong> deep wrinkles & fine lines in just <strong>1 week.</strong></p><p><strong>98%</strong> of users report skin looks healthier, brighter, plumper & more nourished.</p><p><strong>93%</strong> of users report an improvement in puffiness and sagging.</p>"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 10,
+  "presets": [
+    {
+      "name": "Before & After Results",
+      "category": "Image + Text",
+      "blocks": [
+        {
+          "type": "result_item",
+          "settings": {
+            "result_content": "<p><strong>Significantly reduces</strong> deep wrinkles & fine lines in just <strong>1 week.</strong></p><p><strong>98%</strong> of users report skin looks healthier, brighter, plumper & more nourished.</p><p><strong>93%</strong> of users report an improvement in puffiness and sagging.</p>"
+          }
+        },
+        {
+          "type": "result_item",
+          "settings": {
+            "result_content": "<p><strong>Significantly improves</strong> skin firmness & elasticity in just <strong>1 week.</strong></p><p><strong>95%</strong> of users report their face looks younger & cheekbones look more lifted.</p><p><strong>90%</strong> of users report an improvement in pigmentation and the appearance of pores.</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,165 @@
+<!-- CSS for Styling Tabs -->
+<style>
+  .tabs-header {
+    display: flex;
+    margin-bottom: 20px;
+  }
+  .tabs-section .container {
+    max-width: calc(var(--max-width) + calc(var(--space-outer) * 2));
+    margin: 0 auto;
+    padding: var(--spacing-10) var(--space-outer);
+}
+.tabs-section .top-header_wraper .tab-head {
+    text-align: center;
+}
+  .tabs {
+    list-style: none;
+    display: flex;
+    padding: 0;
+  }
+
+  .tab {
+    padding: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    margin-right: 20px;
+  }
+
+  .tab i {
+    margin-right: 8px;
+  }
+
+  .tab.active {
+    font-weight: bold;
+    color: #f56c6c;
+  }
+
+  .tabs-content .tab-content {
+    display: none;
+  }
+
+  .tabs-content .tab-content:first-child {
+    display: block;
+  }
+</style>
+
+<div class="tabs-section">
+<div class="container">
+    <div class="top-header_wraper">
+        <div class="tab-head">
+            <h2 class="tab-title">
+                {{ section.settings.top_title }}
+            </h2>
+            <p>
+            {{ section.settings.top_subtitle }}    
+            </p>
+        </div>
+        <div class="tabs-header">
+        <ul class="tabs">
+      {% for block in section.blocks %}
+        <li class="tab" id="tab{{ forloop.index }}">
+          {% if block.settings.tab_image %}
+            <img src="{{ block.settings.tab_image | img_url: '20x20' }}" alt="{{ block.settings.tab_title }}">
+          {% endif %}
+          <span>{{ block.settings.tab_title }}</span>
+        </li>
+      {% endfor %}
+        </ul>
+    </div>
+
+  <div class="tabs-content">
+    {% for block in section.blocks %}
+      <div class="tab-content" id="content{{ forloop.index }}">
+        <h3>{{ block.settings.tab-inner_title }}</h3>
+        <p>{{ block.settings.tab_content }}</p>
+      </div>
+    {% endfor %}
+  </div>
+  </div>
+  </div>
+</div>
+
+<!-- JavaScript for Tab Switching -->
+<script>
+  const tabs = document.querySelectorAll('.tab');
+  const contents = document.querySelectorAll('.tab-content');
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', function() {
+      const targetContent = document.getElementById(`content${tab.id.slice(-1)}`);
+      
+      // Hide all content and deactivate all tabs
+      contents.forEach(content => content.style.display = 'none');
+      tabs.forEach(t => t.classList.remove('active'));
+
+      // Show the clicked content and activate the tab
+      targetContent.style.display = 'block';
+      tab.classList.add('active');
+    });
+  });
+
+  // Initialize by showing the first tab's content
+  document.getElementById('content1').style.display = 'block';
+  document.getElementById('tab1').classList.add('active');
+</script>
+
+{% schema %}
+{
+  "name": "Tabs with Icons",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Tab Settings"
+    },
+    {
+        "type": "text",
+        "id": "top_title",
+        "label": "Add Section title here"
+    },
+    {
+        "type": "richtext",
+        "id": "top_subtitle",
+        "label": "Add Section subtitle here"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "tab",
+      "name": "Tab",
+      "settings": [
+        {
+          "type": "text",
+          "label": "Tab Title",
+          "id": "tab_title",
+          "default": "Tab Title"
+        },
+        {
+          "type": "image_picker",
+          "id": "tab_image",
+          "label": "Tab Image"
+        },
+        {
+            "type": "text",
+            "id": "tab-inner_title",
+            "label": "Add Tab title here"
+        },
+        {
+          "type": "textarea",
+          "label": "Tab Content",
+          "id": "tab_content",
+          "default": "Tab content goes here."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Default Tabs"
+    },
+    {
+      "name": "Skincare Solutions"
+    }
+  ]
+}
+{% endschema %}
